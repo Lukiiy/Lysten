@@ -21,8 +21,7 @@ public class AbstractContainerMixin {
         if (Lysten.invBlur) ((ScreenAccessor) this).renderBgBlur(guiGraphics);
 
         Font font = ((Screen) (Object) this).getFont();
-        String text = "test";
 
-        guiGraphics.drawString(font, Component.literal(text), guiGraphics.guiWidth() - font.width(text) - 10, guiGraphics.guiHeight() - font.lineHeight - 10, 0xFFFFFFFF, true);
+        guiGraphics.drawString(font, Component.literal(Lysten.containerExtra), guiGraphics.guiWidth() - font.width(Lysten.containerExtra) - 10, guiGraphics.guiHeight() - font.lineHeight - 10, 0xFFFFFFFF, true);
     }
 }

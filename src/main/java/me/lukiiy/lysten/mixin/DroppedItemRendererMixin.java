@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.state.ItemEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionfc;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -58,20 +59,17 @@ public class DroppedItemRendererMixin {
 
         switch (Lysten.itemStyle) {
             case BILLBOARD -> instance.mulPose(dispatcher.cameraOrientation());
-            case FACE_PLAYER -> {
-                LocalPlayer player = Minecraft.getInstance().player;
+            case FACE_CAMERA -> {
+                Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+                Vec3 itemPos = new Vec3(state.x, state.y, state.z);
 
-                if (player != null && Minecraft.getInstance().level != null) {
-                    Vec3 itemPos = new Vec3(state.x, state.y, state.z);
-                    Vec3 eyePos = player.getEyePosition(0);
-                    Vec3 dir = eyePos.subtract(itemPos).normalize();
+                Vec3 sub = camera.getPosition().subtract(itemPos).normalize();
 
-                    float yaw = (float) Math.atan2(dir.x, dir.z);
-                    float pitch = (float) Math.asin(-dir.y);
+                float yaw = (float) Math.atan2(sub.x, sub.z);
+                float pitch = (float) Math.asin(-sub.y);
 
-                    instance.mulPose(Axis.YP.rotation(yaw));
-                    instance.mulPose(Axis.XP.rotation(pitch));
-                }
+                instance.mulPose(Axis.YP.rotation(yaw));
+                instance.mulPose(Axis.XP.rotation(pitch));
             }
             default -> instance.mulPose(quaternionfc);
         }

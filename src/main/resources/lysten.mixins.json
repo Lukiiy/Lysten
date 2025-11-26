@@ -7,12 +7,16 @@
   ],
   "client": [
     "AbstractContainerMixin",
+    "ArrowLayerMixin",
     "ChatComponentMixin",
     "DroppedItemRendererMixin",
     "EntityRendererAccessor",
+    "EquipmentLayerMixin",
     "GameRendererMixin",
+    "LivingEntityRendererMixin",
     "ScreenAccessor",
-    "SubtitlesMixin"
+    "SubtitlesMixin",
+    "TutorialToastMixin"
   ],
   "injectors": {
     "defaultRequire": 1
