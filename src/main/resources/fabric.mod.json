@@ -5,7 +5,10 @@
   "name": "Lysten",
   "description": "client specific stuff but for fabric",
   "authors": ["Lukiiy"],
-  "contact": {},
+  "contact": {
+    "sources": "https://github.com/Lukiiy/lysten",
+    "issues": "https://github.com/Lukiiy/lysten/issues"
+  },
   "license": "MIT",
   "icon": "assets/lysten/icon.png",
   "environment": "client",
@@ -22,6 +25,6 @@
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "minecraft": ">=${minecraft_version}"
+    "minecraft": "${minecraft_version}"
   }
 }
