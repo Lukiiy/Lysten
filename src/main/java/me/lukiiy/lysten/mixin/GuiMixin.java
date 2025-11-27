@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,6 +25,9 @@ public abstract class GuiMixin {
     @Inject(method = "renderSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;II)V"), cancellable = true)
     private void lysten$arrowDisplay(GuiGraphics guiGraphics, int i, int j, DeltaTracker deltaTracker, Player player, ItemStack itemStack, int k, CallbackInfo ci) {
         if (!LystenClient.arrowCount || !(itemStack.getItem() instanceof BowItem) && !(itemStack.getItem() instanceof CrossbowItem) || itemStack.getCount() != 1 || itemStack.getMaxStackSize() != 1 || !(player.getInventory().getSelectedItem() == itemStack || player.getOffhandItem() == itemStack)) return;
+
+        GameType gamemode = player.gameMode();
+        if (gamemode == null || gamemode.isCreative()) return;
 
         int arrows = lysten$countArrows(player);
         if (arrows <= 0) return;
