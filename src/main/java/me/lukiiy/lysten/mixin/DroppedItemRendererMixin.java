@@ -40,20 +40,20 @@ public class DroppedItemRendererMixin {
             poseStack.popPose();
         }
 
-        EntityRendererAccessor accessor = (EntityRendererAccessor) this;
+        EntityRenderAccessor accessor = (EntityRenderAccessor) this;
 
         if (!LystenClient.itemDropShadow) accessor.setShadowRadius(0f);
 
     }
 
     @ModifyVariable(method = "render(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("STORE"), ordinal = 1)
-    private float lysten$modifyBobHeight(float value) {
+    private float lysten$bobHeight(float value) {
         return LystenClient.dropBobbing ? value : 0f;
     }
 
     @Redirect(method = "render(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V"))
     private void lysten$rotation(PoseStack instance, Quaternionfc quaternionfc) {
-        EntityRenderDispatcher dispatcher = ((EntityRendererAccessor) this).getDispatcher();
+        EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
 
         switch (LystenClient.itemStyle) {
             case BILLBOARD -> instance.mulPose(dispatcher.cameraOrientation());
