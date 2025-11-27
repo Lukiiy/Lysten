@@ -12,7 +12,4 @@ public interface EntityRendererAccessor {
 
     @Accessor("shadowRadius")
     void setShadowRadius(float value);
-
-    @Accessor("shadowStrength")
-    void setShadowStrength(float value);
 }

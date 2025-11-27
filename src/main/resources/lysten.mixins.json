@@ -12,6 +12,7 @@
     "EntityRendererAccessor",
     "EquipmentLayerMixin",
     "GameRendererMixin",
+    "GuiMixin",
     "LivingEntityRendererMixin",
     "ScreenAccessor",
     "SubtitlesMixin",

@@ -1,5 +1,6 @@
 package me.lukiiy.lysten.mixin;
 
+import me.lukiiy.lysten.client.LystenClient;
 import net.minecraft.client.gui.components.toasts.ToastManager;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,6 +15,8 @@ public abstract class TutorialToastMixin {
 
     @Inject(method = "update", at = @At("HEAD"), cancellable = true)
     private void listen$hide(ToastManager toastManager, long l, CallbackInfo ci) {
+        if (!LystenClient.disableTutorialToasts) return;
+
         ci.cancel();
         hide();
     }

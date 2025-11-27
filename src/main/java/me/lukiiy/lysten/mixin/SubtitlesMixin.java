@@ -1,6 +1,6 @@
 package me.lukiiy.lysten.mixin;
 
-import me.lukiiy.lysten.Lysten;
+import me.lukiiy.lysten.client.LystenClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.SubtitleOverlay;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,11 +13,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class SubtitlesMixin {
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"), index = 4)
     private int lysten$changeBgColor(int originalColor) {
-        return Lysten.subtitlesBgColor;
+        return LystenClient.subtitlesBgColor;
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V"), cancellable = true)
     private void lysten$noArrows(GuiGraphics guiGraphics, CallbackInfo ci) {
-        if (!Lysten.subtitleArrows) ci.cancel();
+        if (!LystenClient.subtitleArrows) ci.cancel();
     }
 }
