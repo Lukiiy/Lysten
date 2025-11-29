@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,7 +28,7 @@ public abstract class GuiMixin {
         if (!LystenClient.arrowCount || !(itemStack.getItem() instanceof BowItem) && !(itemStack.getItem() instanceof CrossbowItem) || itemStack.getCount() != 1 || itemStack.getMaxStackSize() != 1 || !(player.getInventory().getSelectedItem() == itemStack || player.getOffhandItem() == itemStack)) return;
 
         GameType gamemode = player.gameMode();
-        if (gamemode == null || gamemode.isCreative()) return;
+        if (gamemode == null || gamemode.isCreative() || itemStack.getEnchantments().getLevel(player.level().registryAccess().getOrThrow(Enchantments.INFINITY)) > 0) return;
 
         int arrows = lysten$countArrows(player);
         if (arrows <= 0) return;

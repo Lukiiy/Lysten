@@ -14,13 +14,14 @@ public class LystenClient implements ClientModInitializer {
     public static int hitColor = 0;
     public static String containerExtra = "<3";
     public static boolean renderOwnNametag = true;
-    public static boolean renderStuckArrows = false;
+    public static boolean renderStuckArtifacts = false;
     public static boolean disableTutorialToasts = true;
     public static boolean arrowCount = true;
     public static float titleScale = 1f;
     public static float subtitleScale = 1f;
     public static boolean nametagShadow = true;
     public static int nametagBg = 0;
+    public static boolean chatShadow = false;
 
     @Override
     public void onInitializeClient() {}
