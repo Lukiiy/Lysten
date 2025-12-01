@@ -7,10 +7,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(SubtitleOverlay.class)
-public class SubtitlesMixin {
+public class ClosedCaptionsMixin {
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"), index = 4)
     private int lysten$changeBgColor(int originalColor) {
-        return LystenClient.subtitlesBgColor;
+        return LystenClient.subtitlesBgColor != 0 ? LystenClient.subtitlesBgColor : originalColor;
     }
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V"), index = 1)

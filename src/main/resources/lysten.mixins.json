@@ -8,6 +8,7 @@
     "AbstractContainerMixin",
     "ArrowLayerMixin",
     "ChatComponentMixin",
+    "ClosedCaptionsMixin",
     "DroppedItemRendererMixin",
     "EntityRenderAccessor",
     "EntityRenderMixin",
@@ -15,9 +16,10 @@
     "GameRendererMixin",
     "GuiMixin",
     "LivingEntityRendererMixin",
+    "PauseMixin",
     "ScreenAccessor",
+    "ScreenMixin",
     "StingLayerMixin",
-    "SubtitlesMixin",
     "TutorialToastMixin"
   ],
   "injectors": {
