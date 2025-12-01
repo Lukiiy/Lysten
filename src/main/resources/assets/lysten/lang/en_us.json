@@ -25,6 +25,7 @@
   "lysten.setting.nametagBg": "Nametag Background Color",
   "lysten.setting.uiSeeThrough": "See through UI",
   "lysten.setting.armorHitTint": "Armor Damage Tint",
+  "lysten.setting.chatShadow": "Chat Text Shadow",
   "lysten.config.stylecycle": "Style",
   "lysten.config.intbox": "Insert a number from %s to %s",
   "lysten.config.colorbox": "Please insert a valid ARGB color!\nExample: \"FF57C4FF\"\nLeave it blank for default!"

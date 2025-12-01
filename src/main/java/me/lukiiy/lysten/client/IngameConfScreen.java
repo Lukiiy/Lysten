@@ -95,8 +95,8 @@ public class IngameConfScreen extends Screen {
             addEntry(new IntEntry("maxChatHistory", 1, 10000));
             addEntry(new ColorEntry("subtitlesBgColor"));
             addEntry(new BooleanEntry("subtitleArrows"));
-            addEntry(new FloatEntry("titleScale", 0.5f, 2f));
-            addEntry(new FloatEntry("subtitleScale", 0.5f, 2f));
+            addEntry(new FloatEntry("titleScale", .1f, 4f));
+            addEntry(new FloatEntry("subtitleScale", .1f, 4f));
         }
 
         @Override

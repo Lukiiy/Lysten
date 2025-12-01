@@ -23,13 +23,14 @@ public class LystenClient implements ClientModInitializer {
     public static int nametagBg;
     public static boolean uiSeeThrough;
     public static boolean armorHitTint;
+    public static boolean chatShadow;
 
     @Override
     public void onInitializeClient() {}
 
     public enum ItemRenderStyle {
         VANILLA,
-        FLAT_SPRITE, // Minecraft Beta
+        FLAT_SPRITE,
         BILLBOARD,
         FACE_CAMERA
     }

@@ -37,6 +37,7 @@ public class Lysten implements ModInitializer {
         CONFIG.setIfAbsent("nametagBg", "0");
         CONFIG.setIfAbsent("uiSeeThrough", "true");
         CONFIG.setIfAbsent("armorHitTint", "false");
+        CONFIG.setIfAbsent("chatShadow", "true");
 
         loadConfig();
     }
@@ -61,13 +62,14 @@ public class Lysten implements ModInitializer {
             LystenClient.titleScale = Float.parseFloat(CONFIG.getOrDefault("titleScale", "1.0"));
             LystenClient.subtitleScale = Float.parseFloat(CONFIG.getOrDefault("subtitleScale", "1.0"));
         } catch (NumberFormatException e) {
-            LystenClient.titleScale = 1.0f;
-            LystenClient.subtitleScale = 1.0f;
+            LystenClient.titleScale = 1;
+            LystenClient.subtitleScale = 1;
         }
 
         LystenClient.nametagShadow = CONFIG.getBoolean("nametagShadow");
         LystenClient.nametagBg = (int) CONFIG.getLong("nametagBg");
         LystenClient.uiSeeThrough = CONFIG.getBoolean("uiSeeThrough");
         LystenClient.armorHitTint = CONFIG.getBoolean("armorHitTint");
+        LystenClient.chatShadow = CONFIG.getBoolean("chatShadow");
     }
 }
