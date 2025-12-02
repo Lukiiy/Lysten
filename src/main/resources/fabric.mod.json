@@ -18,6 +18,9 @@
     ],
     "main": [
       "me.lukiiy.lysten.Lysten"
+    ],
+    "modmenu": [
+      "me.lukiiy.lysten.ModMenuHook"
     ]
   },
   "mixins": [
@@ -26,5 +29,8 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "minecraft": "${minecraft_version}"
+  },
+  "suggests": {
+    "modmenu": ">=${modmenu_version}"
   }
 }
