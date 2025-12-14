@@ -36,9 +36,9 @@ public class IngameConfScreen extends Screen {
         layout.addToHeader(LinearLayout.vertical().spacing(8)).addChild(new StringWidget(TITLE, font), LayoutSettings::alignHorizontallyCenter);
 
         list = new ConfigList();
+
         layout.addToContents(list);
         layout.addToFooter(LinearLayout.horizontal().spacing(8)).addChild(Button.builder(CommonComponents.GUI_DONE, b -> onClose()).width(100).build());
-
         layout.visitWidgets(this::addRenderableWidget);
         repositionElements();
     }
@@ -69,20 +69,20 @@ public class IngameConfScreen extends Screen {
         }
 
         private void loadStuff() {
-            addEntry(new CategoryEntry("lysten.config.category.visuals"));
+            addEntry(new CategoryEntry("visuals"));
             addEntry(new BooleanEntry("screenBobbing"));
             addEntry(new EnumEntry<>("itemStyle", "lysten.config.stylecycle", LystenClient.ItemRenderStyle.class));
             addEntry(new BooleanEntry("dropBobbing"));
             addEntry(new BooleanEntry("itemDropShadow"));
 
-            addEntry(new CategoryEntry("lysten.config.category.misc"));
+            addEntry(new CategoryEntry("misc"));
             addEntry(new ColorEntry("hitColor"));
             addEntry(new StringEntry("containerExtra"));
             addEntry(new BooleanEntry("renderStuckArtifacts"));
             addEntry(new BooleanEntry("tutorialToasts"));
             addEntry(new BooleanEntry("arrowCount"));
 
-            addEntry(new CategoryEntry("lysten.config.category.render"));
+            addEntry(new CategoryEntry("render"));
             addEntry(new BooleanEntry("invBlur"));
             addEntry(new BooleanEntry("nametagShadow"));
             addEntry(new ColorEntry("nametagBg"));
@@ -90,7 +90,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new BooleanEntry("uiSeeThrough"));
             addEntry(new BooleanEntry("armorHitTint"));
 
-            addEntry(new CategoryEntry("lysten.config.category.uichanges"));
+            addEntry(new CategoryEntry("uichanges"));
             addEntry(new BooleanEntry("chatShadow"));
             addEntry(new IntEntry("maxChatHistory", 1, 10000));
             addEntry(new ColorEntry("subtitlesBgColor"));
@@ -122,7 +122,7 @@ public class IngameConfScreen extends Screen {
             private final Component text;
 
             public CategoryEntry(String label) {
-                this.text = Component.translatable(label).withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD);
+                this.text = Component.translatable("lysten.config.category." + label).withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD);
             }
 
             @Override
