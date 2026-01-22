@@ -40,6 +40,7 @@ public class Lysten implements ModInitializer {
         CONFIG.setIfAbsent("chatShadow", "true");
         CONFIG.setIfAbsent("blockOutlineFull", "false");
         CONFIG.setIfAbsent("blockOutlineColor", "0");
+        CONFIG.setIfAbsent("deathAnimStyle", "VANILLA");
 
         loadConfig();
     }
@@ -75,5 +76,6 @@ public class Lysten implements ModInitializer {
         LystenClient.chatShadow = CONFIG.getBoolean("chatShadow");
         LystenClient.blockOutlineFull = CONFIG.getBoolean("blockOutlineFull");
         LystenClient.blockOutlineColor = (int) CONFIG.getLong("blockOutlineColor");
+        LystenClient.deathAnimStyle = LystenClient.DeathAnimationStyle.valueOf(CONFIG.getOrDefault("deathAnimStyle", "VANILLA"));
     }
 }

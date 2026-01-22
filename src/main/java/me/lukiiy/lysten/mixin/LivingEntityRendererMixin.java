@@ -5,29 +5,32 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import me.lukiiy.lysten.client.HurtContext;
 import me.lukiiy.lysten.client.LystenClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ARGB;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import org.joml.Quaternionfc;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderState> {
+    @Shadow
+    protected abstract boolean isShaking(S livingEntityRenderState);
+
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At("TAIL"))
     private void lysten$renderHurtOverlay(LivingEntity entity, LivingEntityRenderState state, float partialTicks, CallbackInfo ci) {
         if (LystenClient.hitColor != 0 && entity.hurtTime > 0) state.hasRedOverlay = ARGB.alpha(LystenClient.hitColor) != 0;
@@ -59,5 +62,20 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
     @ModifyExpressionValue(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;D)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getCameraEntity()Lnet/minecraft/world/entity/Entity;"))
     private Entity lysten$renderOwnNametag(Entity original) {
         return LystenClient.renderOwnNametag && !(Minecraft.getInstance().screen instanceof AbstractContainerScreen<?>) ? null : original;
+    }
+
+    @Inject(method = "setupRotations", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V", ordinal = 1), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
+    private void lysten$deathRot(S livingEntityRenderState, PoseStack poseStack, float f, float g, CallbackInfo ci, float h) {
+        switch (LystenClient.deathAnimStyle) {
+            case NONE -> {
+                poseStack.mulPose(Axis.YP.rotationDegrees(0));
+                ci.cancel();
+            }
+            case FALLBACK -> {
+                poseStack.mulPose(Axis.XN.rotationDegrees(h * -90));
+                ci.cancel();
+            }
+            case null, default -> {}
+        }
     }
 }

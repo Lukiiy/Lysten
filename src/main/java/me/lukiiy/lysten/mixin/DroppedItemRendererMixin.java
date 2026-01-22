@@ -43,8 +43,8 @@ public class DroppedItemRendererMixin {
 
             Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
             poseStack.mulPose(Axis.YP.rotationDegrees(-camera.getYRot()));
-            poseStack.scale(1f, 1f, .01f);
-            poseStack.translate(0, LystenClient.dropBobbing ? (float) (Math.sin(state.ageInTicks / 10f + state.bobOffset) * .1f + .1f) : .2f, 0);
+            poseStack.scale(1, 1, .01f);
+            poseStack.translate(0, LystenClient.dropBobbing ? (float) (Math.sin(state.ageInTicks / 10 + state.bobOffset) * .1f + .1f) : .2f, 0);
 
             state.item.render(poseStack, buffers, light, OverlayTexture.NO_OVERLAY);
             poseStack.popPose();
@@ -55,7 +55,7 @@ public class DroppedItemRendererMixin {
 
     @ModifyVariable(method = "render(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("STORE"), ordinal = 1)
     private float lysten$bobHeight(float value) {
-        return LystenClient.dropBobbing ? value : 0f;
+        return LystenClient.dropBobbing ? value : 0;
     }
 
     @Redirect(method = "render(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V"))
@@ -65,10 +65,8 @@ public class DroppedItemRendererMixin {
         switch (LystenClient.itemStyle) {
             case BILLBOARD -> instance.mulPose(dispatcher.cameraOrientation());
             case FACE_CAMERA -> {
-                Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
                 Vec3 itemPos = new Vec3(lysten$state.x, lysten$state.y, lysten$state.z);
-
-                Vec3 sub = camera.getPosition().subtract(itemPos).normalize();
+                Vec3 sub = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().subtract(itemPos).normalize();
 
                 float yaw = (float) Math.atan2(sub.x, sub.z);
                 float pitch = (float) Math.asin(-sub.y);

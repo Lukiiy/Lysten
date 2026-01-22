@@ -26,6 +26,7 @@ public class LystenClient implements ClientModInitializer {
     public static boolean chatShadow;
     public static boolean blockOutlineFull;
     public static int blockOutlineColor;
+    public static DeathAnimationStyle deathAnimStyle;
 
     @Override
     public void onInitializeClient() {}
@@ -35,5 +36,11 @@ public class LystenClient implements ClientModInitializer {
         FLAT_SPRITE,
         BILLBOARD,
         FACE_CAMERA
+    }
+
+    public enum DeathAnimationStyle {
+        VANILLA,
+        NONE,
+        FALLBACK
     }
 }
