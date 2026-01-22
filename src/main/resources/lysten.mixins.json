@@ -15,6 +15,7 @@
     "EquipmentLayerMixin",
     "GameRendererMixin",
     "GuiMixin",
+    "LevelRendererMixin",
     "LivingEntityRendererMixin",
     "PauseMixin",
     "ScreenAccessor",

@@ -83,6 +83,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new EnumEntry<>("itemStyle", "lysten.config.stylecycle", LystenClient.ItemRenderStyle.class));
             addEntry(new BooleanEntry("dropBobbing"));
             addEntry(new BooleanEntry("itemDropShadow"));
+            addEntry(new BooleanEntry("blockOutlineFull"));
 
             addEntry(new CategoryEntry("misc"));
             addEntry(new ColorEntry("hitColor"));
@@ -98,6 +99,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new BooleanEntry("renderOwnNametag"));
             addEntry(new BooleanEntry("uiSeeThrough"));
             addEntry(new BooleanEntry("armorHitTint"));
+            addEntry(new ColorEntry("blockOutlineColor"));
 
             addEntry(new CategoryEntry("uichanges"));
             addEntry(new BooleanEntry("chatShadow"));
@@ -148,7 +150,7 @@ public class IngameConfScreen extends Screen {
                 this.widget = widget;
 
                 if (widget != null) {
-                    widget.setMessage(label);
+                    if (!(widget instanceof CycleButton<?>)) widget.setMessage(label);
                     children.add(widget);
                 }
             }

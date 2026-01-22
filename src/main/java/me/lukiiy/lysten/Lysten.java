@@ -38,6 +38,8 @@ public class Lysten implements ModInitializer {
         CONFIG.setIfAbsent("uiSeeThrough", "true");
         CONFIG.setIfAbsent("armorHitTint", "false");
         CONFIG.setIfAbsent("chatShadow", "true");
+        CONFIG.setIfAbsent("blockOutlineFull", "false");
+        CONFIG.setIfAbsent("blockOutlineColor", "0");
 
         loadConfig();
     }
@@ -71,5 +73,7 @@ public class Lysten implements ModInitializer {
         LystenClient.uiSeeThrough = CONFIG.getBoolean("uiSeeThrough");
         LystenClient.armorHitTint = CONFIG.getBoolean("armorHitTint");
         LystenClient.chatShadow = CONFIG.getBoolean("chatShadow");
+        LystenClient.blockOutlineFull = CONFIG.getBoolean("blockOutlineFull");
+        LystenClient.blockOutlineColor = (int) CONFIG.getLong("blockOutlineColor");
     }
 }

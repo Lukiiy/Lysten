@@ -24,6 +24,8 @@ public class LystenClient implements ClientModInitializer {
     public static boolean uiSeeThrough;
     public static boolean armorHitTint;
     public static boolean chatShadow;
+    public static boolean blockOutlineFull;
+    public static int blockOutlineColor;
 
     @Override
     public void onInitializeClient() {}
