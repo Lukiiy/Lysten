@@ -28,6 +28,7 @@
   "lysten.setting.chatShadow": "Chat Text Shadow",
   "lysten.setting.blockOutlineFull": "Cube Outline",
   "lysten.setting.blockOutlineColor": "Block Outline Color",
+  "lysten.setting.deathAnimStyle": "Entity Death Style",
   "lysten.config.stylecycle": "Style",
   "lysten.config.intbox": "Insert a number from %s to %s",
   "lysten.config.colorbox": "Please insert a valid ARGB color!\nExample: \"FF57C4FF\"\nLeave it blank for default!"
