@@ -28,6 +28,8 @@ public class LystenClient implements ClientModInitializer {
     public static int blockOutlineColor;
     public static DeathAnimationStyle deathAnimStyle;
     public static ParticleRenderStyle particleRenderStyle;
+    public static boolean cleanerHitboxes;
+    public static boolean lighterBlockParticles;
 
     @Override
     public void onInitializeClient() {}
@@ -47,7 +49,6 @@ public class LystenClient implements ClientModInitializer {
 
     public enum ParticleRenderStyle {
         VANILLA,
-        FACE_CAMERA,
-        FLAT
+        FACE_CAMERA
     }
 }

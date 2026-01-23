@@ -36,13 +36,6 @@ public abstract class SingleQuadParticleMixin {
 
                 quaternionf.identity().rotateY(yaw).rotateX(pitch);
             }
-            case FLAT -> {
-                instance.setRotation(quaternionf, camera, v);
-
-                Vector3f forward = new Vector3f(0, 0, 1).rotate(quaternionf);
-
-                quaternionf.identity().rotateY((float) Math.atan2(forward.x(), forward.z()));
-            }
             default -> instance.setRotation(quaternionf, camera, v);
         }
     }

@@ -23,4 +23,10 @@ public interface ParticleAccessor {
 
     @Accessor("zo")
     double zo();
+
+    @Accessor("gravity")
+    float gravity();
+
+    @Accessor("gravity")
+    void setGravity(float gravity);
 }

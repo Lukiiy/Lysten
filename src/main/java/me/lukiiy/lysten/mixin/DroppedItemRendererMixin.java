@@ -7,6 +7,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.entity.state.ItemEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -27,6 +28,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class DroppedItemRendererMixin {
     @Unique private static ItemEntityRenderState lysten$state;
     @Unique private static ItemStack lysten$stack;
+    @Unique private static float lysten$shadowCache;
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void lysten$init(EntityRendererProvider.Context context, CallbackInfo ci) {
+        lysten$shadowCache = ((EntityRenderAccessor) this).getShadowRadius();
+    }
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/item/ItemEntity;Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;F)V", at = @At("HEAD"))
     private void lysten$grabStack(ItemEntity itemEntity, ItemEntityRenderState itemEntityRenderState, float f, CallbackInfo ci) {
@@ -50,7 +57,8 @@ public class DroppedItemRendererMixin {
             poseStack.popPose();
         }
 
-        if (!LystenClient.itemDropShadow) ((EntityRenderAccessor) this).setShadowRadius(0f);
+        if (LystenClient.itemDropShadow) ((EntityRenderAccessor) this).setShadowRadius(lysten$shadowCache);
+        else ((EntityRenderAccessor) this).setShadowRadius(0);
     }
 
     @ModifyVariable(method = "render(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("STORE"), ordinal = 1)

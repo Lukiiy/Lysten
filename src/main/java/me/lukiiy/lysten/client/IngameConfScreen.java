@@ -86,6 +86,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new BooleanEntry("blockOutlineFull"));
             addEntry(new EnumEntry<>("deathAnimStyle", "lysten.config.stylecycle", LystenClient.DeathAnimationStyle.class));
             addEntry(new EnumEntry<>("particleStyle", "lysten.config.stylecycle", LystenClient.ParticleRenderStyle.class));
+            addEntry(new BooleanEntry("lighterBlockParticles"));
 
             addEntry(new CategoryEntry("misc"));
             addEntry(new ColorEntry("hitColor"));
@@ -102,6 +103,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new BooleanEntry("uiSeeThrough"));
             addEntry(new BooleanEntry("armorHitTint"));
             addEntry(new ColorEntry("blockOutlineColor"));
+            addEntry(new BooleanEntry("cleanerHitboxes"));
 
             addEntry(new CategoryEntry("uichanges"));
             addEntry(new BooleanEntry("chatShadow"));

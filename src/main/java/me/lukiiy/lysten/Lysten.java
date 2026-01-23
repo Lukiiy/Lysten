@@ -42,6 +42,8 @@ public class Lysten implements ModInitializer {
         CONFIG.setIfAbsent("blockOutlineColor", "0");
         CONFIG.setIfAbsent("deathAnimStyle", "VANILLA");
         CONFIG.setIfAbsent("particleStyle", "VANILLA");
+        CONFIG.setIfAbsent("cleanerHitboxes", "false");
+        CONFIG.setIfAbsent("lighterBlockParticles", "true");
 
         loadConfig();
     }
@@ -79,5 +81,7 @@ public class Lysten implements ModInitializer {
         LystenClient.blockOutlineColor = (int) CONFIG.getLong("blockOutlineColor");
         LystenClient.deathAnimStyle = LystenClient.DeathAnimationStyle.valueOf(CONFIG.getOrDefault("deathAnimStyle", "VANILLA"));
         LystenClient.particleRenderStyle = LystenClient.ParticleRenderStyle.valueOf(CONFIG.getOrDefault("particleStyle", "VANILLA"));
+        LystenClient.cleanerHitboxes = CONFIG.getBoolean("cleanerHitboxes");
+        LystenClient.lighterBlockParticles = CONFIG.getBoolean("lighterBlockParticles");
     }
 }

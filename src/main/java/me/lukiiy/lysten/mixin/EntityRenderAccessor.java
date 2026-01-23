@@ -8,4 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface EntityRenderAccessor {
     @Accessor("shadowRadius")
     void setShadowRadius(float value);
+
+    @Accessor("shadowRadius")
+    float getShadowRadius();
 }

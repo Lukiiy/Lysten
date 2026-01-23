@@ -11,6 +11,7 @@
     "ClosedCaptionsMixin",
     "DroppedItemRendererMixin",
     "EntityRenderAccessor",
+    "EntityRenderDispatchMixin",
     "EntityRenderMixin",
     "EquipmentLayerMixin",
     "GameRendererMixin",
@@ -23,6 +24,7 @@
     "ScreenMixin",
     "SingleQuadParticleMixin",
     "StingLayerMixin",
+    "TerrainParticleMixin",
     "TutorialToastMixin"
   ],
   "injectors": {
