@@ -85,6 +85,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new BooleanEntry("itemDropShadow"));
             addEntry(new BooleanEntry("blockOutlineFull"));
             addEntry(new EnumEntry<>("deathAnimStyle", "lysten.config.stylecycle", LystenClient.DeathAnimationStyle.class));
+            addEntry(new EnumEntry<>("particleStyle", "lysten.config.stylecycle", LystenClient.ParticleRenderStyle.class));
 
             addEntry(new CategoryEntry("misc"));
             addEntry(new ColorEntry("hitColor"));

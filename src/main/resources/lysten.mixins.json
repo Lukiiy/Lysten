@@ -17,9 +17,11 @@
     "GuiMixin",
     "LevelRendererMixin",
     "LivingEntityRendererMixin",
+    "ParticleAccessor",
     "PauseMixin",
     "ScreenAccessor",
     "ScreenMixin",
+    "SingleQuadParticleMixin",
     "StingLayerMixin",
     "TutorialToastMixin"
   ],
