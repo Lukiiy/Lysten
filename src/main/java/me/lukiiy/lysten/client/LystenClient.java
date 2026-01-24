@@ -30,6 +30,7 @@ public class LystenClient implements ClientModInitializer {
     public static ParticleRenderStyle particleRenderStyle;
     public static boolean cleanerHitboxes;
     public static boolean lighterBlockParticles;
+    public static boolean filteredFireLayer;
 
     @Override
     public void onInitializeClient() {}

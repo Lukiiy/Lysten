@@ -44,6 +44,7 @@ public class Lysten implements ModInitializer {
         CONFIG.setIfAbsent("particleStyle", "VANILLA");
         CONFIG.setIfAbsent("cleanerHitboxes", "false");
         CONFIG.setIfAbsent("lighterBlockParticles", "true");
+        CONFIG.setIfAbsent("filteredFireLayer", "true");
 
         loadConfig();
     }
@@ -83,5 +84,6 @@ public class Lysten implements ModInitializer {
         LystenClient.particleRenderStyle = LystenClient.ParticleRenderStyle.valueOf(CONFIG.getOrDefault("particleStyle", "VANILLA"));
         LystenClient.cleanerHitboxes = CONFIG.getBoolean("cleanerHitboxes");
         LystenClient.lighterBlockParticles = CONFIG.getBoolean("lighterBlockParticles");
+        LystenClient.filteredFireLayer = CONFIG.getBoolean("filteredFireLayer");
     }
 }
