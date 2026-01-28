@@ -5,18 +5,15 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-
-import java.util.Objects;
 
 @Mixin(SingleQuadParticle.class)
 public abstract class SingleQuadParticleMixin {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/SingleQuadParticle$FacingCameraMode;setRotation(Lorg/joml/Quaternionf;Lnet/minecraft/client/Camera;F)V"))
     private void lysten$overrideParticleRotation(SingleQuadParticle.FacingCameraMode instance, Quaternionf quaternionf, Camera camera, float v) {
-        if (Objects.requireNonNull(LystenClient.particleRenderStyle.get()) == LystenClient.ParticleRenderStyle.FACE_CAMERA) {
+        if (LystenClient.particleRenderStyle.get() == LystenClient.ParticleRenderStyle.FACE_CAMERA) {
             Vec3 camLoc = camera.getPosition();
             double dX = camLoc.x - ((ParticleAccessor) this).x();
             double dY = camLoc.y - ((ParticleAccessor) this).y();
@@ -36,6 +33,6 @@ public abstract class SingleQuadParticleMixin {
             float pitch = (float) Math.asin((float) -dY);
 
             quaternionf.identity().rotateY(yaw).rotateX(pitch);
-        }
+        } else instance.setRotation(quaternionf, camera, v);
     }
 }
