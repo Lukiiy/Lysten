@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ArrowLayerMixin {
     @Inject(method = "numStuck", at = @At("HEAD"), cancellable = true)
     private void lysten$noStuckArrows(PlayerRenderState playerRenderState, CallbackInfoReturnable<Integer> cir) {
-        if (!LystenClient.renderStuckArtifacts) cir.setReturnValue(0);
+        if (!LystenClient.renderStuckArtifacts.get()) cir.setReturnValue(0);
     }
 }

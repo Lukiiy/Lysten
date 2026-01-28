@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public class EquipmentLayerMixin {
     @ModifyArg(method = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/resources/ResourceLocation;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V"), index = 4)
     private int lysten$hurtArmorColor(int original) {
-        if (!LystenClient.armorHitTint) return original;
+        if (!LystenClient.armorHitTint.get()) return original;
 
-        int color = LystenClient.hitColor;
+        int color = LystenClient.hitColor.get();
         if (color == 0 || ARGB.alpha(color) == 0) return original;
 
         LivingEntity entity = HurtContext.get();

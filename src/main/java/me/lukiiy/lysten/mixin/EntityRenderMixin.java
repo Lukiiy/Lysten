@@ -11,11 +11,13 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class EntityRenderMixin {
     @ModifyArg(method = "renderNameTag", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font;drawInBatch(Lnet/minecraft/network/chat/Component;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/gui/Font$DisplayMode;II)V"), index = 8)
     private int lysten$nametagBg(int originalBg) {
-        return LystenClient.nametagBg == 0 ? originalBg : LystenClient.nametagBg;
+        int bg = LystenClient.nametagBg.get();
+
+        return bg == 0 ? originalBg : bg;
     }
 
     @ModifyVariable(method = "renderNameTag", at = @At("STORE"), ordinal = 0)
     private boolean lysten$toggleShadow(boolean original) {
-        return LystenClient.nametagShadow;
+        return LystenClient.nametagShadow.get();
     }
 }

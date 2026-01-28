@@ -25,7 +25,7 @@ import java.util.stream.IntStream;
 public abstract class GuiMixin {
     @Inject(method = "renderSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;II)V"), cancellable = true)
     private void lysten$arrowDisplay(GuiGraphics guiGraphics, int i, int j, DeltaTracker deltaTracker, Player player, ItemStack itemStack, int k, CallbackInfo ci) {
-        if (!LystenClient.arrowCount || !(itemStack.getItem() instanceof BowItem) && !(itemStack.getItem() instanceof CrossbowItem) || itemStack.getCount() != 1 || itemStack.getMaxStackSize() != 1 || !(player.getInventory().getSelectedItem() == itemStack || player.getOffhandItem() == itemStack)) return;
+        if (!LystenClient.arrowCount.get() || !(itemStack.getItem() instanceof BowItem) && !(itemStack.getItem() instanceof CrossbowItem) || itemStack.getCount() != 1 || itemStack.getMaxStackSize() != 1 || !(player.getInventory().getSelectedItem() == itemStack || player.getOffhandItem() == itemStack)) return;
 
         GameType gamemode = player.gameMode();
         if (gamemode == null || gamemode.isCreative() || itemStack.getEnchantments().getLevel(player.level().registryAccess().getOrThrow(Enchantments.INFINITY)) > 0) return;
@@ -45,21 +45,21 @@ public abstract class GuiMixin {
 
     @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix3x2fStack;scale(FF)Lorg/joml/Matrix3x2f;", ordinal = 0), index = 0)
     private float lysten$titleScaleX(float original) {
-        return original * LystenClient.titleScale;
+        return original * LystenClient.titleScale.get();
     }
 
     @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix3x2fStack;scale(FF)Lorg/joml/Matrix3x2f;", ordinal = 0), index = 1)
     private float lysten$titleScaleY(float original) {
-        return original * LystenClient.titleScale;
+        return original * LystenClient.titleScale.get();
     }
 
     @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix3x2fStack;scale(FF)Lorg/joml/Matrix3x2f;", ordinal = 1), index = 0)
     private float lysten$subtitleScaleX(float original) {
-        return original * LystenClient.subtitleScale;
+        return original * LystenClient.subtitleScale.get();
     }
 
     @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix3x2fStack;scale(FF)Lorg/joml/Matrix3x2f;", ordinal = 1), index = 1)
     private float lysten$subtitleScaleY(float original) {
-        return original * LystenClient.subtitleScale;
+        return original * LystenClient.subtitleScale.get();
     }
 }

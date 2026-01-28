@@ -12,11 +12,13 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class LevelRendererMixin {
     @ModifyArg(method = "renderHitOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ShapeRenderer;renderShape(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/phys/shapes/VoxelShape;DDDI)V", ordinal = 0), index = 2)
     private VoxelShape lysten$changeShape(VoxelShape voxelShape) {
-        return LystenClient.blockOutlineFull ? Shapes.block() : voxelShape;
+        return LystenClient.blockOutlineFull.get() ? Shapes.block() : voxelShape;
     }
 
     @ModifyArg(method = "renderHitOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ShapeRenderer;renderShape(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/phys/shapes/VoxelShape;DDDI)V"), index = 6)
     private int lysten$changeColor(int i) {
-        return LystenClient.blockOutlineColor != 0 ? LystenClient.blockOutlineColor : i;
+        int color = LystenClient.blockOutlineColor.get();
+
+        return color != 0 ? color : i;
     }
 }

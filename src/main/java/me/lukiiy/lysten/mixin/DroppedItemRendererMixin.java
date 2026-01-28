@@ -44,33 +44,33 @@ public class DroppedItemRendererMixin {
     private void lysten$render(ItemEntityRenderState state, PoseStack poseStack, MultiBufferSource buffers, int light, CallbackInfo ci) {
         DroppedItemRendererMixin.lysten$state = state;
 
-        if (LystenClient.itemStyle == LystenClient.ItemRenderStyle.FLAT_SPRITE && !(lysten$stack.getItem() instanceof BlockItem)) {
+        if (LystenClient.itemStyle.get() == LystenClient.ItemRenderStyle.FLAT_SPRITE && !(lysten$stack.getItem() instanceof BlockItem)) {
             ci.cancel();
             poseStack.pushPose();
 
             Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
             poseStack.mulPose(Axis.YP.rotationDegrees(-camera.getYRot()));
             poseStack.scale(1, 1, .01f);
-            poseStack.translate(0, LystenClient.dropBobbing ? (float) (Math.sin(state.ageInTicks / 10 + state.bobOffset) * .1f + .1f) : .2f, 0);
+            poseStack.translate(0, LystenClient.dropBobbing.get() ? (float) (Math.sin(state.ageInTicks / 10 + state.bobOffset) * .1f + .1f) : .2f, 0);
 
             state.item.render(poseStack, buffers, light, OverlayTexture.NO_OVERLAY);
             poseStack.popPose();
         }
 
-        if (LystenClient.itemDropShadow) ((EntityRenderAccessor) this).setShadowRadius(lysten$shadowCache);
+        if (LystenClient.itemDropShadow.get()) ((EntityRenderAccessor) this).setShadowRadius(lysten$shadowCache);
         else ((EntityRenderAccessor) this).setShadowRadius(0);
     }
 
     @ModifyVariable(method = "render(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("STORE"), ordinal = 1)
     private float lysten$bobHeight(float value) {
-        return LystenClient.dropBobbing ? value : 0;
+        return LystenClient.dropBobbing.get() ? value : 0;
     }
 
     @Redirect(method = "render(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V"))
     private void lysten$rotation(PoseStack instance, Quaternionfc quaternionfc) {
         EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
 
-        switch (LystenClient.itemStyle) {
+        switch (LystenClient.itemStyle.get()) {
             case BILLBOARD -> instance.mulPose(dispatcher.cameraOrientation());
             case FACE_CAMERA -> {
                 Vec3 itemPos = new Vec3(lysten$state.x, lysten$state.y, lysten$state.z);

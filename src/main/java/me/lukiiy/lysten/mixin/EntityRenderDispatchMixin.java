@@ -19,7 +19,7 @@ public abstract class EntityRenderDispatchMixin {
 
     @Inject(method = "renderHitboxesAndViewVector", at = @At("HEAD"), cancellable = true)
     private static void lysten$onlyRenderHitboxes(PoseStack poseStack, HitboxesRenderState hitboxesRenderState, VertexConsumer vertexConsumer, float f, CallbackInfo ci) {
-        if (!LystenClient.cleanerHitboxes) return;
+        if (!LystenClient.cleanerHitboxes.get()) return;
 
         for (HitboxRenderState hitbox : hitboxesRenderState.hitboxes()) renderHitbox(poseStack, vertexConsumer, hitbox);
 
