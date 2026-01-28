@@ -12,16 +12,16 @@ import org.spongepowered.asm.mixin.injection.*;
 public class ChatComponentMixin {
     @ModifyConstant(method = "*", constant = @Constant(intValue = 100))
     private static int lysten$maxHistory(int original) {
-        return LystenClient.maxChatHistory;
+        return LystenClient.maxChatHistory.get();
     }
 
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ArrayListDeque;<init>(I)V"))
     private int lysten$maxRecentHistory(int original) {
-        return LystenClient.maxChatHistory;
+        return LystenClient.maxChatHistory.get();
     }
 
     @Redirect(method = "method_71991", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;III)V"))
     private void lysten$toggleShadow(GuiGraphics instance, Font font, FormattedCharSequence formattedCharSequence, int i, int j, int k) {
-        instance.drawString(font, formattedCharSequence, i, j, k, LystenClient.chatShadow);
+        instance.drawString(font, formattedCharSequence, i, j, k, LystenClient.chatShadow.get());
     }
 }

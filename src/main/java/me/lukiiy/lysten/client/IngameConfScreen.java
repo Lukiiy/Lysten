@@ -1,7 +1,7 @@
 package me.lukiiy.lysten.client;
 
 import com.google.common.collect.Lists;
-import me.lukiiy.lysten.Lysten;
+import me.lukiiy.lysten.ConfigKey;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
@@ -19,26 +19,23 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public class IngameConfScreen extends Screen {
-    private static final Component TITLE = Component.translatable("lysten.config.title");
     private final HeaderAndFooterLayout layout = new HeaderAndFooterLayout(this, 33, 33);
     private ConfigList list;
     private final Screen before;
 
     public IngameConfScreen(Screen before) {
-        super(TITLE);
+        super(Component.translatable("lysten.config.title"));
 
         this.before = before;
     }
 
     @Override
     protected void init() {
-        layout.addToHeader(LinearLayout.vertical().spacing(8)).addChild(new StringWidget(TITLE, font), LayoutSettings::alignHorizontallyCenter);
+        layout.addToHeader(LinearLayout.vertical().spacing(8)).addChild(new StringWidget(this.getTitle(), font), LayoutSettings::alignHorizontallyCenter);
         list = new ConfigList();
 
         layout.addToContents(list);
@@ -62,7 +59,7 @@ public class IngameConfScreen extends Screen {
 
     @Override
     public void onClose() {
-        Lysten.loadConfig();
+        ConfigKey.reloadItAll();
 
         if (before != null) minecraft.setScreen(before);
     }
@@ -79,39 +76,39 @@ public class IngameConfScreen extends Screen {
 
         private void loadStuff() {
             addEntry(new CategoryEntry("visuals"));
-            addEntry(new BooleanEntry("screenBobbing"));
-            addEntry(new EnumEntry<>("itemStyle", "lysten.config.stylecycle", LystenClient.ItemRenderStyle.class));
-            addEntry(new BooleanEntry("dropBobbing"));
-            addEntry(new BooleanEntry("itemDropShadow"));
-            addEntry(new BooleanEntry("blockOutlineFull"));
-            addEntry(new EnumEntry<>("deathAnimStyle", "lysten.config.stylecycle", LystenClient.DeathAnimationStyle.class));
-            addEntry(new EnumEntry<>("particleStyle", "lysten.config.stylecycle", LystenClient.ParticleRenderStyle.class));
-            addEntry(new BooleanEntry("lighterBlockParticles"));
+            addEntry(new BooleanEntry(LystenClient.screenBobbing));
+            addEntry(new EnumEntry<>(LystenClient.itemStyle, LystenClient.ItemRenderStyle.class));
+            addEntry(new BooleanEntry(LystenClient.dropBobbing));
+            addEntry(new BooleanEntry(LystenClient.itemDropShadow));
+            addEntry(new BooleanEntry(LystenClient.blockOutlineFull));
+            addEntry(new EnumEntry<>(LystenClient.deathAnimStyle, LystenClient.DeathAnimationStyle.class));
+            addEntry(new EnumEntry<>(LystenClient.particleRenderStyle, LystenClient.ParticleRenderStyle.class));
+            addEntry(new BooleanEntry(LystenClient.lighterBlockParticles));
 
             addEntry(new CategoryEntry("misc"));
-            addEntry(new ColorEntry("hitColor"));
-            addEntry(new StringEntry("containerExtra"));
-            addEntry(new BooleanEntry("renderStuckArtifacts"));
-            addEntry(new BooleanEntry("tutorialToasts"));
-            addEntry(new BooleanEntry("arrowCount"));
+            addEntry(new ColorEntry(LystenClient.hitColor));
+            addEntry(new StringEntry(LystenClient.containerExtra));
+            addEntry(new BooleanEntry(LystenClient.renderStuckArtifacts));
+            addEntry(new BooleanEntry(LystenClient.tutorialToasts));
+            addEntry(new BooleanEntry(LystenClient.arrowCount));
 
             addEntry(new CategoryEntry("render"));
-            addEntry(new BooleanEntry("invBlur"));
-            addEntry(new BooleanEntry("nametagShadow"));
-            addEntry(new ColorEntry("nametagBg"));
-            addEntry(new BooleanEntry("renderOwnNametag"));
-            addEntry(new BooleanEntry("uiSeeThrough"));
-            addEntry(new BooleanEntry("armorHitTint"));
-            addEntry(new ColorEntry("blockOutlineColor"));
-            addEntry(new BooleanEntry("cleanerHitboxes"));
+            addEntry(new BooleanEntry(LystenClient.invBlur));
+            addEntry(new BooleanEntry(LystenClient.nametagShadow));
+            addEntry(new ColorEntry(LystenClient.nametagBg));
+            addEntry(new BooleanEntry(LystenClient.renderOwnNametag));
+            addEntry(new BooleanEntry(LystenClient.uiSeeThrough));
+            addEntry(new BooleanEntry(LystenClient.armorHitTint));
+            addEntry(new ColorEntry(LystenClient.blockOutlineColor));
+            addEntry(new BooleanEntry(LystenClient.cleanerHitboxes));
 
             addEntry(new CategoryEntry("uichanges"));
-            addEntry(new BooleanEntry("chatShadow"));
-            addEntry(new IntEntry("maxChatHistory", 1, 10000));
-            addEntry(new ColorEntry("subtitlesBgColor"));
-            addEntry(new BooleanEntry("subtitleArrows"));
-            addEntry(new FloatEntry("titleScale", .1f, 4f));
-            addEntry(new FloatEntry("subtitleScale", .1f, 4f));
+            addEntry(new BooleanEntry(LystenClient.chatShadow));
+            addEntry(new IntEntry(LystenClient.maxChatHistory, 1, 10000));
+            addEntry(new ColorEntry(LystenClient.subtitlesBgColor));
+            addEntry(new BooleanEntry(LystenClient.subtitleArrows));
+            addEntry(new FloatEntry(LystenClient.titleScale, .1f, 4f));
+            addEntry(new FloatEntry(LystenClient.subtitleScale, .1f, 4f));
         }
 
         @Override
@@ -119,12 +116,14 @@ public class IngameConfScreen extends Screen {
             return 310;
         }
 
-        private EditBox createEditBox(String key, String defaultValue, int width) {
-            EditBox box = new EditBox(font, 0, 0, width, 20, Component.literal(key));
+        private <T> EditBox createEditBox(ConfigKey<T> key, int width) {
+            EditBox box = new EditBox(font, 0, 0, width, 20, Component.literal(key.key));
+            T value = key.get();
 
-            box.setValue(Lysten.CONFIG.getOrDefault(key, defaultValue));
+            box.setValue(value == null ? "" : value.toString());
             return box;
         }
+
 
         private record StaticNarration(Component text) implements NarratableEntry {
             @Override
@@ -139,14 +138,17 @@ public class IngameConfScreen extends Screen {
         }
 
         abstract class Entry extends ContainerObjectSelectionList.Entry<Entry> {
+            protected final ConfigKey<?> key;
             protected final List<AbstractWidget> children = Lists.newArrayList();
-            protected final Component label;
+            protected Component label;
             protected final StaticNarration labelNarration;
             protected AbstractWidget widget;
 
-            protected Entry(Component label, AbstractWidget widget) {
-                this.label = label;
+            protected Entry(ConfigKey<?> key, AbstractWidget widget) {
+                this.key = key;
+                this.label = key == null ? null : Component.translatable("lysten.setting." + key.key);
                 this.labelNarration = label == null ? null : new StaticNarration(label);
+
                 setWidget(widget);
             }
 
@@ -154,7 +156,8 @@ public class IngameConfScreen extends Screen {
                 this.widget = widget;
 
                 if (widget != null) {
-                    if (!(widget instanceof CycleButton<?>)) widget.setMessage(label);
+                    if (key != null && key.isUnreloadable()) widget.setTooltip(Tooltip.create(Component.translatable("lysten.config.nonReloadable")));
+
                     children.add(widget);
                 }
             }
@@ -182,8 +185,10 @@ public class IngameConfScreen extends Screen {
         }
 
         class CategoryEntry extends Entry {
-            public CategoryEntry(String key) {
-                super(Component.translatable("lysten.config.category." + key).withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD), null);
+            public CategoryEntry(String categoryKey) {
+                super(null, null);
+
+                this.label = Component.translatable("lysten.config.category." + categoryKey).withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD);
             }
 
             @Override
@@ -193,31 +198,40 @@ public class IngameConfScreen extends Screen {
         }
 
         class BooleanEntry extends Entry {
-            public BooleanEntry(String key) {
-                super(Component.translatable("lysten.setting." + key), Checkbox.builder(Component.empty(), font).selected(Lysten.CONFIG.getBoolean(key)).onValueChange((b, v) -> Lysten.CONFIG.set(key, String.valueOf(v))).build());
+            public BooleanEntry(ConfigKey<Boolean> key) {
+                super(key, Checkbox.builder(Component.empty(), font).selected(key.get()).onValueChange((b, v) -> key.set(v)).build());
             }
         }
 
+
         class IntEntry extends Entry {
-            public IntEntry(String key, int min, int max) {
-                super(Component.translatable("lysten.setting." + key), createEditBox(key, "0", 60));
+            public IntEntry(ConfigKey<Integer> key, int min, int max) {
+                super(key, createEditBox(key, 60));
+
                 EditBox box = (EditBox) widget;
 
                 box.setFilter(s -> s.isEmpty() || s.matches("\\d+"));
-                box.setResponder(s -> Lysten.CONFIG.set(key, String.valueOf(Math.clamp(s.isEmpty() ? 0 : Integer.parseInt(s), min, max))));
+                box.setResponder(s -> {
+                    int v = s.isEmpty() ? key.defaultValue : Integer.parseInt(s);
+
+                    key.set(Math.clamp(v, min, max));
+                });
             }
+
         }
 
         class ColorEntry extends Entry {
-            public ColorEntry(String key) {
-                super(Component.translatable("lysten.setting." + key), createEditBox(key, "", 60));
+            public ColorEntry(ConfigKey<Integer> key) {
+                super(key, createEditBox(key, 60));
+
                 EditBox box = (EditBox) widget;
 
                 box.setMaxLength(8);
                 box.setFilter(s -> s.matches("^[0-9A-Fa-f]{0,8}$"));
-                box.setValue(Integer.toHexString(Integer.parseInt(Lysten.CONFIG.getOrDefault(key, "0"))));
-                box.setResponder(s -> Lysten.CONFIG.set(key, String.valueOf(hexToInt(s))));
+                box.setValue(Integer.toHexString(key.get()));
+                box.setResponder(s -> key.set(hexToInt(s)));
             }
+
 
             @Override
             public void render(GuiGraphics instance, int index, int y, int x, int width, int h, int mx, int my, boolean hovered, float delta) {
@@ -249,35 +263,35 @@ public class IngameConfScreen extends Screen {
         }
 
         class FloatEntry extends Entry {
-            public FloatEntry(String key, float min, float max) {
-                super(Component.translatable("lysten.setting." + key), createEditBox(key, "1.0", 80));
+            public FloatEntry(ConfigKey<Float> key, float min, float max) {
+                super(key, createEditBox(key, 80));
+
                 EditBox box = (EditBox) widget;
 
                 box.setFilter(s -> s.matches("\\d*\\.?\\d*"));
                 box.setResponder(s -> {
                     if (s.isEmpty() || s.equals(".")) return;
-
-                    Lysten.CONFIG.set(key, String.valueOf(Math.clamp(Float.parseFloat(s), min, max)));
+                    key.set(Math.clamp(Float.parseFloat(s), min, max));
                 });
             }
+
         }
 
         class StringEntry extends Entry {
-            public StringEntry(String key) {
-                super(Component.translatable("lysten.setting." + key), createEditBox(key, "", 120));
-                ((EditBox) widget).setResponder(s -> Lysten.CONFIG.set(key, s));
+            public StringEntry(ConfigKey<String> key) {
+                super(key, createEditBox(key, 120));
+
+                ((EditBox) widget).setResponder(key::set);
             }
         }
 
         class EnumEntry<T extends Enum<T>> extends Entry {
-            public EnumEntry(String key, String cycleLabel, Class<T> enumClass) {
-                super(Component.translatable("lysten.setting." + key), null);
+            public EnumEntry(ConfigKey<T> key, Class<T> enumClass) {
+                super(key, null);
 
                 T[] values = enumClass.getEnumConstants();
-                T current = Optional.ofNullable(Lysten.CONFIG.get(key)).map(v -> Enum.valueOf(enumClass, v)).orElse(values[0]);
 
-                int width = font.width(Component.translatable(cycleLabel)) + font.width(": ") + Arrays.stream(values).mapToInt(v -> font.width(v.name())).max().orElse(0) + 10;
-                setWidget(CycleButton.<T>builder(v -> Component.literal(v.name())).withValues(values).withInitialValue(current).create(0, 0, width, 20, Component.translatable(cycleLabel), (btn, val) -> Lysten.CONFIG.set(key, val.name())));
+                setWidget(CycleButton.<T>builder(v -> Component.literal(v.name())).withValues(values).displayOnlyValue().withInitialValue(key.get()).create(0, 0, 120, 20, Component.empty(), (b, v) -> key.set(v)));
             }
         }
     }

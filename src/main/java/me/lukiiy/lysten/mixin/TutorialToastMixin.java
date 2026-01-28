@@ -15,7 +15,7 @@ public abstract class TutorialToastMixin {
 
     @Inject(method = "update", at = @At("HEAD"), cancellable = true)
     private void listen$hide(ToastManager toastManager, long l, CallbackInfo ci) {
-        if (LystenClient.tutorialToasts) return;
+        if (LystenClient.tutorialToasts.get()) return;
 
         ci.cancel();
         hide();

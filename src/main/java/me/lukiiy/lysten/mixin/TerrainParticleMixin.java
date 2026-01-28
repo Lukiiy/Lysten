@@ -23,7 +23,7 @@ public class TerrainParticleMixin {
 
     @Inject(method = "<init>(Lnet/minecraft/client/multiplayer/ClientLevel;DDDDDDLnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)V", at = @At("TAIL"))
     private void lysten$lessGravity(ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, BlockState blockState, BlockPos blockPos, CallbackInfo ci) {
-        if (!LystenClient.lighterBlockParticles || blockState.getTags().filter(lysten$gravityTags::contains).findFirst().orElse(null) == null) return;
+        if (!LystenClient.lighterBlockParticles.get() || blockState.getTags().filter(lysten$gravityTags::contains).findFirst().orElse(null) == null) return;
 
         ((ParticleAccessor) this).setGravity(((ParticleAccessor) this).gravity() * .4f);
     }
