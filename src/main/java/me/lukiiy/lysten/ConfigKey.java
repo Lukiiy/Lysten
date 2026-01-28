@@ -1,30 +1,62 @@
 package me.lukiiy.lysten;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 
-public record ConfigKey<T>(String key, T defaultValue, Function<String, T> parser, Function<T, String> serializer) {
-    public ConfigKey {
+public class ConfigKey<T> {
+    public final String key;
+    public final T defaultValue;
+    public final Function<String, T> parser;
+    public final Function<T, String> serializer;
+    private T stored;
+
+    private static final Set<ConfigKey<?>> RUN_RELOADABLE = new HashSet<>();
+
+    private ConfigKey(String key, T defaultValue, Function<String, T> parser, Function<T, String> serializer) {
+        this.key = key;
+        this.defaultValue = defaultValue;
+        this.parser = parser;
+        this.serializer = serializer;
+
+        RUN_RELOADABLE.add(this);
         writeDefault();
     }
 
     public void writeDefault() {
-        if (defaultValue() == null || serializer() == null) return;
+        if (defaultValue == null) return;
 
         Lysten.CONFIG.setIfAbsent(key, serializer.apply(defaultValue));
     }
 
-    public T get() {
+    public void load() {
         String raw = Lysten.CONFIG.getOrDefault(key, serializer.apply(defaultValue));
 
         try {
-            return parser.apply(raw);
+            stored = parser.apply(raw);
         } catch (Exception e) {
-            return defaultValue;
+            stored = defaultValue;
         }
     }
 
+    public T get() {
+        return stored != null ? stored : defaultValue;
+    }
+
     public void set(T value) {
+        stored = value;
+
         Lysten.CONFIG.set(key, serializer.apply(value));
+    }
+
+    public ConfigKey<T> setUnreloadable() {
+        RUN_RELOADABLE.remove(this);
+
+        return this;
+    }
+
+    public static void reloadItAll() {
+        RUN_RELOADABLE.forEach(ConfigKey::load);
     }
 
     public static ConfigKey<Boolean> bool(String key, boolean def) {

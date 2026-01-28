@@ -59,6 +59,8 @@ public class IngameConfScreen extends Screen {
 
     @Override
     public void onClose() {
+        ConfigKey.reloadItAll();
+
         if (before != null) minecraft.setScreen(before);
     }
 
@@ -115,7 +117,7 @@ public class IngameConfScreen extends Screen {
         }
 
         private <T> EditBox createEditBox(ConfigKey<T> key, int width) {
-            EditBox box = new EditBox(font, 0, 0, width, 20, Component.literal(key.key()));
+            EditBox box = new EditBox(font, 0, 0, width, 20, Component.literal(key.key));
             T value = key.get();
 
             box.setValue(value == null ? "" : value.toString());
@@ -144,7 +146,7 @@ public class IngameConfScreen extends Screen {
 
             protected Entry(ConfigKey<?> key, AbstractWidget widget) {
                 this.key = key;
-                this.label = key == null ? null : Component.translatable("lysten.setting." + key.key());
+                this.label = key == null ? null : Component.translatable("lysten.setting." + key.key);
                 this.labelNarration = label == null ? null : new StaticNarration(label);
 
                 setWidget(widget);
@@ -206,7 +208,8 @@ public class IngameConfScreen extends Screen {
 
                 box.setFilter(s -> s.isEmpty() || s.matches("\\d+"));
                 box.setResponder(s -> {
-                    int v = s.isEmpty() ? key.defaultValue() : Integer.parseInt(s);
+                    int v = s.isEmpty() ? key.defaultValue : Integer.parseInt(s);
+
                     key.set(Math.clamp(v, min, max));
                 });
             }

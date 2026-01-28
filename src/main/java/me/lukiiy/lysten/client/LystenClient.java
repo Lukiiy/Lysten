@@ -9,7 +9,7 @@ public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Boolean> dropBobbing = ConfigKey.bool("dropBobbing", true);
     public static ConfigKey<ItemRenderStyle> itemStyle = ConfigKey.enumKey("itemStyle", ItemRenderStyle.class, ItemRenderStyle.FACE_CAMERA);
     public static ConfigKey<Boolean> itemDropShadow = ConfigKey.bool("itemDropShadow", true);
-    public static ConfigKey<Integer> maxChatHistory = ConfigKey.integer("maxChatHistory", 512);
+    public static ConfigKey<Integer> maxChatHistory = ConfigKey.integer("maxChatHistory", 512).setUnreloadable();
     public static ConfigKey<Integer> subtitlesBgColor = ConfigKey.integer("subtitlesBgColor", 0);
     public static ConfigKey<Boolean> subtitleArrows = ConfigKey.bool("subtitleArrows", false);
     public static ConfigKey<Integer> hitColor = ConfigKey.integer("hitColor", 0);
