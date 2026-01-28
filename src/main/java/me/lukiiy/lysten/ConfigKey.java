@@ -55,6 +55,10 @@ public class ConfigKey<T> {
         return this;
     }
 
+    public boolean isUnreloadable() {
+        return !RUN_RELOADABLE.contains(this);
+    }
+
     public static void reloadItAll() {
         RUN_RELOADABLE.forEach(ConfigKey::load);
     }

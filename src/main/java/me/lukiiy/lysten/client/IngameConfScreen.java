@@ -155,7 +155,11 @@ public class IngameConfScreen extends Screen {
             protected void setWidget(AbstractWidget widget) {
                 this.widget = widget;
 
-                if (widget != null) children.add(widget);
+                if (widget != null) {
+                    if (key != null && key.isUnreloadable()) widget.setTooltip(Tooltip.create(Component.translatable("lysten.config.nonReloadable")));
+
+                    children.add(widget);
+                }
             }
 
             @Override
