@@ -1,8 +1,7 @@
-package me.lukiiy.lysten;
+package me.lukiiy.lysten.client;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import me.lukiiy.lysten.client.IngameConfScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

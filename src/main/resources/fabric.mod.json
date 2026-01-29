@@ -20,7 +20,7 @@
       "me.lukiiy.lysten.Lysten"
     ],
     "modmenu": [
-      "me.lukiiy.lysten.ModMenuHook"
+      "me.lukiiy.lysten.client.ModMenuHook"
     ]
   },
   "mixins": [
