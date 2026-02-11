@@ -5,7 +5,7 @@ import net.fabricmc.api.ClientModInitializer;
 
 public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Boolean> screenBobbing = ConfigKey.bool("screenBobbing", false);
-    public static ConfigKey<Boolean> invBlur = ConfigKey.bool("invBlur", true);
+    public static ConfigKey<Boolean> invBlur = ConfigKey.bool("invBlur", true); // TODO
     public static ConfigKey<Boolean> dropBobbing = ConfigKey.bool("dropBobbing", true);
     public static ConfigKey<ItemRenderStyle> itemStyle = ConfigKey.enumKey("itemStyle", ItemRenderStyle.class, ItemRenderStyle.FACE_CAMERA);
     public static ConfigKey<Boolean> itemDropShadow = ConfigKey.bool("itemDropShadow", true);
@@ -24,7 +24,7 @@ public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Integer> nametagBg = ConfigKey.integer("nametagBg", 0);
     public static ConfigKey<Boolean> uiSeeThrough = ConfigKey.bool("uiSeeThrough", true);
     public static ConfigKey<Boolean> armorHitTint = ConfigKey.bool("armorHitTint", false);
-    public static ConfigKey<Boolean> chatShadow = ConfigKey.bool("chatShadow", true);
+    public static ConfigKey<Boolean> chatShadow = ConfigKey.bool("chatShadow", true); // TODO
     public static ConfigKey<Boolean> blockOutlineFull = ConfigKey.bool("blockOutlineFull", false);
     public static ConfigKey<Integer> blockOutlineColor = ConfigKey.integer("blockOutlineColor", 0);
     public static ConfigKey<DeathAnimationStyle> deathAnimStyle = ConfigKey.enumKey("deathAnimStyle", DeathAnimationStyle.class, DeathAnimationStyle.VANILLA);

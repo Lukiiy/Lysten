@@ -58,22 +58,6 @@ public class Config {
         return properties.getProperty(key);
     }
 
-    public boolean getBoolean(String key) {
-        String value = get(key);
-
-        return value != null && value.equalsIgnoreCase("true");
-    }
-
-    public long getLong(String key) {
-        try {
-            String value = get(key);
-
-            return value != null ? Long.parseLong(value) : 0L;
-        } catch (NumberFormatException e) {
-            return 0L;
-        }
-    }
-
     public String getOrDefault(String key, String defaultValue) {
         return properties.getProperty(key, defaultValue);
     }
