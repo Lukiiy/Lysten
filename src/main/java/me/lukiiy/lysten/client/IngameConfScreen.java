@@ -96,6 +96,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new BooleanEntry(LystenClient.arrowCount));
 
             addEntry(new CategoryEntry("render"));
+            addEntry(new BooleanEntry(LystenClient.invBlur));
             addEntry(new BooleanEntry(LystenClient.nametagShadow));
             addEntry(new ColorEntry(LystenClient.nametagBg));
             addEntry(new BooleanEntry(LystenClient.renderOwnNametag));

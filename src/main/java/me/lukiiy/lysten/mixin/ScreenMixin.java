@@ -25,8 +25,6 @@ public abstract class ScreenMixin {
     private void lysten$renderBg(GuiGraphics guiGraphics, int i, int j, float f, CallbackInfo ci) { // TODO
         if ((!LystenClient.uiSeeThrough.get() && !(minecraft.screen instanceof PauseScreen)) || minecraft.level == null) renderPanorama(guiGraphics, f);
 
-        renderBlurredBackground(guiGraphics);
-        renderMenuBackground(guiGraphics);
         ci.cancel();
     }
 }
