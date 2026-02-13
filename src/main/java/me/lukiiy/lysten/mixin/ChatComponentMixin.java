@@ -1,7 +1,11 @@
 package me.lukiiy.lysten.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.lukiiy.lysten.client.LystenClient;
 import net.minecraft.client.gui.components.ChatComponent;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.FormattedCharSequence;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;

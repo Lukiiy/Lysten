@@ -126,7 +126,6 @@ public class IngameConfScreen extends Screen {
             return box;
         }
 
-
         private record StaticNarration(Component text) implements NarratableEntry {
             @Override
             public NarrationPriority narrationPriority() {

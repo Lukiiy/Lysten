@@ -17,14 +17,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ScreenMixin {
     @Shadow @Final @Nullable protected Minecraft minecraft;
     @Shadow protected abstract void renderPanorama(GuiGraphics guiGraphics, float f);
-    @Shadow protected abstract void renderBlurredBackground(GuiGraphics guiGraphics);
-
-    @Shadow protected abstract void renderMenuBackground(GuiGraphics guiGraphics);
 
     @Inject(method = "renderBackground", at = @At("HEAD"), cancellable = true)
-    private void lysten$renderBg(GuiGraphics guiGraphics, int i, int j, float f, CallbackInfo ci) { // TODO
-        if ((!LystenClient.uiSeeThrough.get() && !(minecraft.screen instanceof PauseScreen)) || minecraft.level == null) renderPanorama(guiGraphics, f);
-
-        ci.cancel();
+    private void lysten$renderBg(GuiGraphics guiGraphics, int i, int j, float f, CallbackInfo ci) {
+        if ((!LystenClient.uiSeeThrough.get() && !(minecraft.screen instanceof PauseScreen)) || minecraft.level == null) {
+            renderPanorama(guiGraphics, f);
+            ci.cancel();
+        }
     }
 }

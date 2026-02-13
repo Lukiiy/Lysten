@@ -3,7 +3,6 @@
   "minVersion": "0.8",
   "package": "me.lukiiy.lysten.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
   "client": [
     "AbstractContainerMixin",
     "ArrowLayerMixin",
@@ -15,6 +14,7 @@
     "GameRendererMixin",
     "GuiMixin",
     "HitboxRendererMixin",
+    "ItemEntityRenderStateMixin",
     "LevelRendererMixin",
     "LivingEntityRendererMixin",
     "NametagRendererMixin",
