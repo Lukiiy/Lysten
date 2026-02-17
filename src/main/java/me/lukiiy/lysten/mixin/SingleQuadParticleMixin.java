@@ -1,38 +1,53 @@
 package me.lukiiy.lysten.mixin;
 
 import me.lukiiy.lysten.client.LystenClient;
-import net.minecraft.client.Camera;
 import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SingleQuadParticle.class)
 public abstract class SingleQuadParticleMixin {
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/SingleQuadParticle$FacingCameraMode;setRotation(Lorg/joml/Quaternionf;Lnet/minecraft/client/Camera;F)V"))
-    private void lysten$overrideParticleRotation(SingleQuadParticle.FacingCameraMode instance, Quaternionf quaternionf, Camera camera, float v) {
-        if (LystenClient.particleRenderStyle.get() == LystenClient.ParticleRenderStyle.FACE_CAMERA) {
-            Vec3 camLoc = camera.getPosition();
-            double dX = camLoc.x - ((ParticleAccessor) this).x();
-            double dY = camLoc.y - ((ParticleAccessor) this).y();
-            double dZ = camLoc.z - ((ParticleAccessor) this).z();
+    @Inject(
+            method = "getFacingCameraMode",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void lysten$overrideFacingMode(CallbackInfoReturnable<SingleQuadParticle.FacingCameraMode> cir) {
 
-            double size = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2) + Math.pow(dZ, 2));
-            if (size < 1e-6) {
+        if (LystenClient.particleRenderStyle.get() != LystenClient.ParticleRenderStyle.FACE_CAMERA) return;
+
+        cir.setReturnValue((quaternionf, camera, tickDelta) -> {
+            SingleQuadParticle self = (SingleQuadParticle) (Object) this;
+            ParticleAccessor partic = (ParticleAccessor) this;
+
+            double px = Mth.lerp(tickDelta, partic.xo(), partic.x());
+            double py = Mth.lerp(tickDelta, partic.yo(), partic.y());
+            double pz = Mth.lerp(tickDelta, partic.zo(), partic.z());
+
+            Vec3 camPos = camera.position();
+
+            double dx = camPos.x - px;
+            double dy = camPos.y - py;
+            double dz = camPos.z - pz;
+
+            double len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
+            if (len < 1e-6) {
                 quaternionf.identity();
                 return;
             }
 
-            dX /= size;
-            dY /= size;
-            dZ /= size;
+            dx /= len;
+            dy /= len;
+            dz /= len;
 
-            float yaw = (float) Math.atan2(dX, dZ);
-            float pitch = (float) Math.asin((float) -dY);
+            float yaw = (float) Math.atan2(dx, dz);
+            float pitch = (float) -Math.asin(dy);
 
             quaternionf.identity().rotateY(yaw).rotateX(pitch);
-        } else instance.setRotation(quaternionf, camera, v);
+        });
     }
 }

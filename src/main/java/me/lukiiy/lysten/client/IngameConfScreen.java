@@ -19,7 +19,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public class IngameConfScreen extends Screen {
@@ -124,7 +126,6 @@ public class IngameConfScreen extends Screen {
             return box;
         }
 
-
         private record StaticNarration(Component text) implements NarratableEntry {
             @Override
             public NarrationPriority narrationPriority() {
@@ -157,6 +158,7 @@ public class IngameConfScreen extends Screen {
 
                 if (widget != null) {
                     if (key != null && key.isUnreloadable()) widget.setTooltip(Tooltip.create(Component.translatable("lysten.config.nonReloadable")));
+                    if (!(widget instanceof CycleButton<?>)) widget.setMessage(label);
 
                     children.add(widget);
                 }
@@ -173,13 +175,13 @@ public class IngameConfScreen extends Screen {
             }
 
             @Override
-            public void render(GuiGraphics instance, int index, int y, int x, int width, int height, int mx, int my, boolean hovered, float delta) {
-                if (label != null) instance.drawString(ConfigList.this.font, label, x, y + 6, -1);
+            public void renderContent(GuiGraphics gfx, int mouseX, int mouseY, boolean hovered, float delta) {
+                if (label != null) gfx.drawString(ConfigList.this.font, label, getContentX(), getContentY() + 6, -1);
 
                 if (widget != null) {
-                    widget.setX(x + width - widget.getWidth());
-                    widget.setY(y);
-                    widget.render(instance, mx, my, delta);
+                    widget.setX(getContentRight() - widget.getWidth());
+                    widget.setY(getContentY());
+                    widget.render(gfx, mouseX, mouseY, delta);
                 }
             }
         }
@@ -192,8 +194,8 @@ public class IngameConfScreen extends Screen {
             }
 
             @Override
-            public void render(GuiGraphics instance, int index, int y, int x, int width, int h, int mx, int my, boolean hovered, float delta) {
-                instance.drawCenteredString(font, label, x + width / 2, y + 6, -1);
+            public void renderContent(GuiGraphics instance, int mouseX, int mouseY, boolean hovered, float delta) {
+                instance.drawCenteredString(ConfigList.this.font, label, getContentXMiddle(), getContentY() + 6, -1);
             }
         }
 
@@ -232,19 +234,19 @@ public class IngameConfScreen extends Screen {
                 box.setResponder(s -> key.set(hexToInt(s)));
             }
 
-
             @Override
-            public void render(GuiGraphics instance, int index, int y, int x, int width, int h, int mx, int my, boolean hovered, float delta) {
-                super.render(instance, index, y, x, width, h, mx, my, hovered, delta);
+            public void renderContent(GuiGraphics instance, int mouseX, int mouseY, boolean hovered, float delta) {
+                super.renderContent(instance, mouseX, mouseY, hovered, delta);
 
                 int color = hexToInt(((EditBox) widget).getValue());
                 if (color != 0) {
                     int size = 10;
                     int px = widget.getX() + widget.getWidth() - size / 2;
                     int py = widget.getY() - size / 2;
+                    int out = 0xFF000000;
 
-                    instance.fill(px, py, px + size, py + size, 0xFF000000 | color);
-                    instance.renderOutline(px, py, size, size, 0xFF000000);
+                    instance.fill(px, py, px + size, py + size, out | color);
+                    instance.renderOutline(px, py, size, size, out);
                 }
             }
 
@@ -290,8 +292,10 @@ public class IngameConfScreen extends Screen {
                 super(key, null);
 
                 T[] values = enumClass.getEnumConstants();
+                T current = Optional.ofNullable(key.get()).map(v -> Enum.valueOf(enumClass, v.name())).orElse(values[0]);
+                int width = Arrays.stream(values).mapToInt(v -> font.width(v.name())).max().orElse(0) + 10;
 
-                setWidget(CycleButton.<T>builder(v -> Component.literal(v.name())).withValues(values).displayOnlyValue().withInitialValue(key.get()).create(0, 0, 120, 20, Component.empty(), (b, v) -> key.set(v)));
+                setWidget(CycleButton.<T>builder(v -> Component.literal(v.name()), () -> current).withValues(values).displayOnlyValue().create(0, 0, width, 20, Component.empty(), (btn, val) -> key.set(val)));
             }
         }
     }

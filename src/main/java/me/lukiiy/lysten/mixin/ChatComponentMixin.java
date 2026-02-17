@@ -1,10 +1,8 @@
 package me.lukiiy.lysten.mixin;
 
 import me.lukiiy.lysten.client.LystenClient;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ChatComponent;
-import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 
@@ -20,8 +18,8 @@ public class ChatComponentMixin {
         return LystenClient.maxChatHistory.get();
     }
 
-    @Redirect(method = "method_71991", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;III)V"))
-    private void lysten$toggleShadow(GuiGraphics instance, Font font, FormattedCharSequence formattedCharSequence, int i, int j, int k) {
-        instance.drawString(font, formattedCharSequence, i, j, k, LystenClient.chatShadow.get());
+    @ModifyVariable(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V", at = @At("HEAD"), argsOnly = true)
+    private Component lysten$shadows(Component component) {
+        return LystenClient.chatShadow.get() ? component : component.copy().withStyle(component.getStyle().withoutShadow());
     }
 }

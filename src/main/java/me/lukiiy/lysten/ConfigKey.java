@@ -21,6 +21,7 @@ public class ConfigKey<T> {
 
         RUN_RELOADABLE.add(this);
         writeDefault();
+        load();
     }
 
     public void writeDefault() {
