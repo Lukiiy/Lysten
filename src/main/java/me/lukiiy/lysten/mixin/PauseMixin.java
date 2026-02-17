@@ -1,21 +1,34 @@
 package me.lukiiy.lysten.mixin;
 
 import me.lukiiy.lysten.client.IngameConfScreen;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.PauseScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.function.Supplier;
+
 @Mixin(PauseScreen.class)
 public abstract class PauseMixin {
-    @Inject(method = "createPauseMenu", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/layouts/GridLayout;visitWidgets(Ljava/util/function/Consumer;)V", shift = At.Shift.AFTER))
-    private void lysten$configBtn(CallbackInfo ci) {
-        PauseScreen screen = (PauseScreen) (Object) this;
+    @Shadow
+    protected abstract Button openScreenButton(Component component, Supplier<Screen> supplier);
 
-        ((ScreenAccessor) screen).addWidgetToRender(Button.builder(Component.translatable("lysten.config.mini"), b -> Minecraft.getInstance().setScreen(new IngameConfScreen(screen))).bounds(screen.width - 70, screen.height - 30, 60, 20).build());
+    @Inject(method = "createPauseMenu", at = @At("TAIL"))
+    private void lysten$configBtn(CallbackInfo ci) {
+        Component text = Component.translatable("lysten.config.mini");
+        PauseScreen screen = (PauseScreen) (Object) this;
+        Button button = openScreenButton(text, () -> new IngameConfScreen(screen));
+
+        button.setWidth(screen.getFont().width(text));
+        button.setX(10);
+        button.setY(screen.height / 2);
+
+        ((ScreenAccessor) screen).addWidgetToRender(button);
     }
 }
