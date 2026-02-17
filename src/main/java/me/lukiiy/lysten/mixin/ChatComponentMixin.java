@@ -1,16 +1,10 @@
 package me.lukiiy.lysten.mixin;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.lukiiy.lysten.client.LystenClient;
 import net.minecraft.client.gui.components.ChatComponent;
-import net.minecraft.util.ARGB;
-import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.*;
 
 @Mixin(ChatComponent.class)
 public class ChatComponentMixin {
@@ -22,5 +16,10 @@ public class ChatComponentMixin {
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ArrayListDeque;<init>(I)V"))
     private int lysten$maxRecentHistory(int original) {
         return LystenClient.maxChatHistory.get();
+    }
+
+    @ModifyVariable(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V", at = @At("HEAD"), argsOnly = true)
+    private Component lysten$shadows(Component component) {
+        return LystenClient.chatShadow.get() ? component : component.copy().withStyle(component.getStyle().withoutShadow());
     }
 }

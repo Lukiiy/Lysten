@@ -2,7 +2,6 @@ package me.lukiiy.lysten.client;
 
 import com.google.common.collect.Lists;
 import me.lukiiy.lysten.ConfigKey;
-import me.lukiiy.lysten.Lysten;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
@@ -106,6 +105,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new BooleanEntry(LystenClient.cleanerHitboxes));
 
             addEntry(new CategoryEntry("uichanges"));
+            addEntry(new BooleanEntry(LystenClient.chatShadow));
             addEntry(new IntEntry(LystenClient.maxChatHistory, 1, 10000));
             addEntry(new ColorEntry(LystenClient.subtitlesBgColor));
             addEntry(new BooleanEntry(LystenClient.subtitleArrows));
