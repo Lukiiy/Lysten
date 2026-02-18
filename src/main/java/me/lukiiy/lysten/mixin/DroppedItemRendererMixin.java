@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.entity.state.ItemEntityRenderState;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionfc;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,7 +37,7 @@ public class DroppedItemRendererMixin {
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/item/ItemEntity;Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;F)V", at = @At("TAIL"))
     private void lysten$getStack(ItemEntity entity, ItemEntityRenderState state, float f, CallbackInfo ci) {
-        ((ItemEntityRenderStateAccess) state).lysten$setItem(entity.getItem());
+        ((ItemEntityRenderStateAccess) state).lysten$process(entity.getItem());
     }
 
     @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At("HEAD"))
@@ -48,7 +47,7 @@ public class DroppedItemRendererMixin {
 
     @WrapOperation(method = "submit(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V"))
     private void lysten$flatten(PoseStack instance, Quaternionfc quaternionfc, Operation<Void> original, @Local(argsOnly = true) ItemEntityRenderState state) {
-        if (LystenClient.itemStyle.get() == LystenClient.ItemRenderStyle.FLAT_SPRITE && !(((ItemEntityRenderStateAccess)state).lysten$getItem().getItem() instanceof BlockItem)) {
+        if (LystenClient.itemStyle.get() == LystenClient.ItemRenderStyle.FLAT_SPRITE && (((ItemEntityRenderStateAccess)state).lysten$get2D())) {
             instance.mulPose(Axis.YP.rotationDegrees(-Minecraft.getInstance().gameRenderer.getMainCamera().yRot()));
             instance.scale(1, 1, .01f);
         } else original.call(instance, quaternionfc);

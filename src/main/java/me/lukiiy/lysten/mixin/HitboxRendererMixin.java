@@ -21,11 +21,19 @@ public abstract class HitboxRendererMixin {
         return null;
     }
 
-    @Redirect(method = "showHitboxes(Lnet/minecraft/world/entity/Entity;FZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/gizmos/Gizmos;arrow(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;I)Lnet/minecraft/gizmos/GizmoProperties;"))
+    @Redirect(method = "showHitboxes", at = @At(value = "INVOKE", target = "Lnet/minecraft/gizmos/Gizmos;arrow(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;I)Lnet/minecraft/gizmos/GizmoProperties;"))
     private GizmoProperties lysten$noViewDir(Vec3 from, Vec3 to, int color) {
         if (LystenClient.cleanerHitboxes.get() && color == -16776961) return null;
 
         Gizmos.arrow(from, to, color);
+        return null;
+    }
+
+    @Redirect(method = "showHitboxes", at = @At(value = "INVOKE", target = "Lnet/minecraft/gizmos/Gizmos;point(Lnet/minecraft/world/phys/Vec3;IF)Lnet/minecraft/gizmos/GizmoProperties;"))
+    private GizmoProperties lysten$noPoint(Vec3 vec3, int i, float f) {
+        if (LystenClient.cleanerHitboxes.get()) return null;
+
+        Gizmos.point(vec3, i, f);
         return null;
     }
 }
