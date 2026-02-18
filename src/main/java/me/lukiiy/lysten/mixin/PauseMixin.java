@@ -25,7 +25,7 @@ public abstract class PauseMixin {
         PauseScreen screen = (PauseScreen) (Object) this;
         Button button = openScreenButton(text, () -> new IngameConfScreen(screen));
 
-        button.setWidth(screen.getFont().width(text));
+        button.setWidth(screen.getFont().width(text) + 10);
         button.setX(10);
         button.setY(screen.height / 2);
 
