@@ -89,7 +89,7 @@ public class IngameConfScreen extends Screen {
 
             addEntry(new CategoryEntry("misc"));
             addEntry(new ColorEntry(LystenClient.hitColor));
-            addEntry(new StringEntry(LystenClient.containerExtra));
+            addEntry(new StringEntry(LystenClient.containerExtra, true));
             addEntry(new BooleanEntry(LystenClient.renderStuckArtifacts));
             addEntry(new BooleanEntry(LystenClient.tutorialToasts));
             addEntry(new BooleanEntry(LystenClient.arrowCount));
@@ -273,6 +273,7 @@ public class IngameConfScreen extends Screen {
                 box.setFilter(s -> s.matches("\\d*\\.?\\d*"));
                 box.setResponder(s -> {
                     if (s.isEmpty() || s.equals(".")) return;
+
                     key.set(Math.clamp(Float.parseFloat(s), min, max));
                 });
             }
@@ -280,10 +281,15 @@ public class IngameConfScreen extends Screen {
         }
 
         class StringEntry extends Entry {
-            public StringEntry(ConfigKey<String> key) {
+            public StringEntry(ConfigKey<String> key, boolean fancy) {
                 super(key, createEditBox(key, 120));
 
-                ((EditBox) widget).setResponder(key::set);
+                EditBox box = (EditBox) widget;
+
+                if (fancy) box.setTooltip(Tooltip.create(Component.translatable("lysten.config.stringbox")));
+
+                box.setMaxLength(512);
+                box.setResponder(key::set);
             }
         }
 

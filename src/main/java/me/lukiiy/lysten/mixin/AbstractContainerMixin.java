@@ -1,6 +1,9 @@
 package me.lukiiy.lysten.mixin;
 
+import com.google.gson.JsonParser;
+import com.mojang.serialization.JsonOps;
 import me.lukiiy.lysten.client.LystenClient;
+import me.lukiiy.uniStyle.UniParser;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Font;
@@ -8,6 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,6 +26,13 @@ public class AbstractContainerMixin {
 
         Font font = ((Screen) (Object) this).getFont();
 
-        guiGraphics.drawString(font, Component.literal(LystenClient.containerExtra.get()), guiGraphics.guiWidth() - font.width(LystenClient.containerExtra.get()) - 10, guiGraphics.guiHeight() - font.lineHeight - 10, 0xFFFFFFFF, true);
+        Component good;
+        try {
+            good = ComponentSerialization.CODEC.parse(JsonOps.INSTANCE, JsonParser.parseString(UniParser.getDEFAULT().serialize(LystenClient.containerExtra.get()))).getOrThrow();
+        } catch (Exception e) {
+            good = Component.literal(LystenClient.containerExtra.get());
+        }
+
+        guiGraphics.drawString(font, good, guiGraphics.guiWidth() - font.width(good) - 10, guiGraphics.guiHeight() - font.lineHeight - 10, 0xFFFFFFFF, true);
     }
 }

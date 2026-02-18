@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "1.13-SNAPSHOT"
+    id("fabric-loom") version "1.15-SNAPSHOT"
 }
 
 version = rootProject.property("version")!!
@@ -13,15 +13,18 @@ repositories {
     maven("https://maven.terraformersmc.com/")
 }
 
-val minecraft = project.property("minecraft_version")
-val loader = project.property("loader_version")
-val modMenuVer = project.property("modmenu_version")
+val minecraft = project.property("minecraft_version")!!
+val loader = project.property("loader_version")!!
+val modMenuVer = project.property("modmenu_version")!!
 
 dependencies {
     minecraft("com.mojang:minecraft:${minecraft}")
     mappings(loom.officialMojangMappings())
+
     modImplementation("net.fabricmc:fabric-loader:${loader}")
     modCompileOnly("com.terraformersmc:modmenu:${modMenuVer}")
+
+    implementation(files("libs/UniStyle.jar"))
 }
 
 tasks {

@@ -38,7 +38,7 @@ public class LystenClient implements ClientModInitializer {
 
     public enum ItemRenderStyle {
         VANILLA,
-        FLAT_SPRITE,
+        FLATTEN,
         BILLBOARD,
         FACE_CAMERA
     }

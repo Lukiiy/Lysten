@@ -35,5 +35,6 @@
   "lysten.setting.filteredFireLayer": "Filtered Fire Overlay",
   "lysten.config.nonReloadable": "If you want to change this setting, you will need to restart your game.",
   "lysten.config.intbox": "Insert a number from %s to %s",
-  "lysten.config.colorbox": "Please insert a valid ARGB color!\nExample: \"FF57C4FF\"\nLeave it blank for default!"
+  "lysten.config.colorbox": "Please insert a valid ARGB color!\nExample: \"FF57C4FF\"\nLeave it blank for default!",
+  "lysten.config.stringbox": "You can decorate your string with bold, colors, etc;\nTry using \"[bold]\", \"italic\", \"[yellow]\" or \"[color:#6996FF]\""
 }
