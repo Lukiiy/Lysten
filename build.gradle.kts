@@ -11,6 +11,10 @@ base {
 
 repositories {
     maven("https://maven.terraformersmc.com/")
+
+    flatDir {
+        dirs("libs")
+    }
 }
 
 val minecraft = project.property("minecraft_version")!!
@@ -23,8 +27,6 @@ dependencies {
 
     modImplementation("net.fabricmc:fabric-loader:${loader}")
     modCompileOnly("com.terraformersmc:modmenu:${modMenuVer}")
-
-    implementation(files("libs/UniStyle.jar"))
 }
 
 tasks {

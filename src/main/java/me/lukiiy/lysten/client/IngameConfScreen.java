@@ -89,7 +89,7 @@ public class IngameConfScreen extends Screen {
 
             addEntry(new CategoryEntry("misc"));
             addEntry(new ColorEntry(LystenClient.hitColor));
-            addEntry(new StringEntry(LystenClient.containerExtra, true));
+            addEntry(new StringEntry(LystenClient.containerExtra));
             addEntry(new BooleanEntry(LystenClient.renderStuckArtifacts));
             addEntry(new BooleanEntry(LystenClient.tutorialToasts));
             addEntry(new BooleanEntry(LystenClient.arrowCount));
@@ -281,12 +281,10 @@ public class IngameConfScreen extends Screen {
         }
 
         class StringEntry extends Entry {
-            public StringEntry(ConfigKey<String> key, boolean fancy) {
+            public StringEntry(ConfigKey<String> key) {
                 super(key, createEditBox(key, 120));
 
                 EditBox box = (EditBox) widget;
-
-                if (fancy) box.setTooltip(Tooltip.create(Component.translatable("lysten.config.stringbox")));
 
                 box.setMaxLength(512);
                 box.setResponder(key::set);
