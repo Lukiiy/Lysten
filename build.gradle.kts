@@ -11,10 +11,6 @@ base {
 
 repositories {
     maven("https://maven.terraformersmc.com/")
-
-    flatDir {
-        dirs("libs")
-    }
 }
 
 val minecraft = project.property("minecraft_version")!!

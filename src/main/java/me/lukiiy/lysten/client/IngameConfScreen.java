@@ -232,6 +232,7 @@ public class IngameConfScreen extends Screen {
                 box.setFilter(s -> s.matches("^[0-9A-Fa-f]{0,8}$"));
                 box.setValue(Integer.toHexString(key.get()));
                 box.setResponder(s -> key.set(hexToInt(s)));
+                box.setTooltip(Tooltip.create(Component.translatable("lysten.config.colorbox")));
             }
 
             @Override
