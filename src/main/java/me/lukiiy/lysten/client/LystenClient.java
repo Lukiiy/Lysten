@@ -32,6 +32,7 @@ public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Boolean> cleanerHitboxes = ConfigKey.bool("cleanerHitboxes", false);
     public static ConfigKey<Boolean> lighterBlockParticles = ConfigKey.bool("lighterBlockParticles", true);
     public static ConfigKey<Boolean> filteredFireLayer = ConfigKey.bool("filteredFireLayer", true);
+    public static ConfigKey<Boolean> hideCloseBobbers = ConfigKey.bool("hideCloseBobbers", true);
 
     @Override
     public void onInitializeClient() {}
