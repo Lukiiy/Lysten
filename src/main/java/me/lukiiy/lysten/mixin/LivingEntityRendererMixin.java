@@ -13,9 +13,11 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ARGB;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
@@ -23,13 +25,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderState> {
+    @Unique
+    private static final Map<LivingEntityRenderState, Float> lysten$HURT = new HashMap<>();
+
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At("TAIL"))
-    private void lysten$renderHurtOverlay(LivingEntity entity, LivingEntityRenderState state, float partialTicks, CallbackInfo ci) {
+    private void lysten$renderHurtOverlay(LivingEntity livingEntity, S livingEntityRenderState, float f, CallbackInfo ci) {
         int color = LystenClient.hitColor.get();
 
-        if (color != 0 && entity.hurtTime > 0) state.hasRedOverlay = ARGB.alpha(color) != 0;
+        if (color != 0 && livingEntity.hurtTime > 0) livingEntityRenderState.hasRedOverlay = ARGB.alpha(color) != 0;
+
+        if (livingEntity.hurtTime > 0) lysten$HURT.put(livingEntityRenderState, livingEntity.hurtTime - f);
+        else lysten$HURT.remove(livingEntityRenderState);
     }
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At("HEAD"))
@@ -40,6 +51,7 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
     @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At("TAIL"))
     private void lysten$clearHurtEntity(S livingEntityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, CallbackInfo ci) {
         HurtContext.clear();
+        lysten$HURT.remove(livingEntityRenderState);
     }
 
     @ModifyArgs(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/texture/TextureAtlasSprite;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"))
@@ -47,8 +59,8 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
         if (!(args.get(1) instanceof LivingEntityRenderState state)) return;
 
         int color = LystenClient.hitColor.get();
-
         if (color == 0 || ARGB.alpha(color) == 0) return;
+
         if (!state.hasRedOverlay) return;
 
         args.set(5, OverlayTexture.NO_OVERLAY);
@@ -75,5 +87,37 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
 
             case null, default -> {}
         }
+    }
+
+    @Inject(method = "setupRotations", at = @At("TAIL"))
+    private void lysten$survivaltestHurtAnim(S state, PoseStack poseStack, float bodyRot, float scale, CallbackInfo ci) {
+        Float hurt = lysten$HURT.get(state);
+        if (hurt == null || hurt <= 0) return;
+
+        float t = hurt;
+
+        float n = 1 - (t / 10);
+        float angle;
+
+        float snapEnd = .15f;
+        float holdEnd = .35f;
+
+        if (n < snapEnd) {
+            float delta = n / snapEnd;
+
+            angle = delta * 28;
+        } else if (n < holdEnd) {
+            angle = 28;
+        } else {
+            float delta = (n - holdEnd) / (1 - holdEnd);
+
+            angle = (1 - delta) * 28;
+        }
+
+        float pivotY = state.boundingBoxHeight * .2f;
+
+        poseStack.translate(0, pivotY, 0);
+        poseStack.mulPose(Axis.XP.rotationDegrees(angle));
+        poseStack.translate(0, -pivotY, 0);
     }
 }
