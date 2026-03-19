@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ARGB;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,7 +38,7 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
 
         if (color != 0 && livingEntity.hurtTime > 0) livingEntityRenderState.hasRedOverlay = ARGB.alpha(color) != 0;
 
-        if (livingEntity.hurtTime > 0) lysten$HURT.put(livingEntityRenderState, livingEntity.hurtTime - f);
+        if (LystenClient.survivalTestHurt.get() && livingEntity.hurtTime > 0) lysten$HURT.put(livingEntityRenderState, livingEntity.hurtTime - f);
         else lysten$HURT.remove(livingEntityRenderState);
     }
 
@@ -94,22 +93,19 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
         Float hurt = lysten$HURT.get(state);
         if (hurt == null || hurt <= 0) return;
 
-        float t = hurt;
-
-        float n = 1 - (t / 10);
-        float angle;
-
+        float progress = 1 - (hurt / 10f);
         float snapEnd = .15f;
         float holdEnd = .35f;
+        float angle;
 
-        if (n < snapEnd) {
-            float delta = n / snapEnd;
+        if (progress < snapEnd) {
+            float delta = progress / snapEnd;
 
             angle = delta * 28;
-        } else if (n < holdEnd) {
+        } else if (progress < holdEnd) {
             angle = 28;
         } else {
-            float delta = (n - holdEnd) / (1 - holdEnd);
+            float delta = (progress - holdEnd) / (1 - holdEnd);
 
             angle = (1 - delta) * 28;
         }
