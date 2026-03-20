@@ -19,6 +19,7 @@
     "LevelRendererMixin",
     "LivingEntityRendererMixin",
     "NametagRendererMixin",
+    "OverlayTextureMixin",
     "ParticleAccessor",
     "PauseMixin",
     "ScreenAccessor",
