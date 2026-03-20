@@ -35,6 +35,8 @@ public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Boolean> hideCloseBobbers = ConfigKey.bool("hideCloseBobbers", true);
     public static ConfigKey<Boolean> survivalTestHurt = ConfigKey.bool("survivalTestHurt", false);
 
+    public static int vanillaHitColor = 0;
+
     @Override
     public void onInitializeClient() {}
 
