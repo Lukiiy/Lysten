@@ -34,6 +34,7 @@
   "lysten.setting.cleanerHitboxes": "Cleaner Hitboxes",
   "lysten.setting.filteredFireLayer": "Filtered Fire Overlay",
   "lysten.setting.hideCloseBobbers": "Hide Obstructive Fishing Bobbers",
+  "lysten.setting.survivalTestHurt": "Survival Test's Damage Animation",
   "lysten.config.nonReloadable": "If you want to change this setting, you will need to restart your game.",
   "lysten.config.intbox": "Insert a number from %s to %s",
   "lysten.config.colorbox": "Please insert a valid ARGB color!\nExample: \"FF57C4FF\"\nLeave it blank for default!"
