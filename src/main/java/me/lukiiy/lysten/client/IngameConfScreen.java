@@ -106,6 +106,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new BooleanEntry(LystenClient.cleanerHitboxes));
             addEntry(new BooleanEntry(LystenClient.hideCloseBobbers));
             addEntry(new BooleanEntry(LystenClient.survivalTestHurt));
+            addEntry(new BooleanEntry(LystenClient.cleanerDebugMenu));
 
             addEntry(new CategoryEntry("uichanges"));
             addEntry(new BooleanEntry(LystenClient.chatShadow));
