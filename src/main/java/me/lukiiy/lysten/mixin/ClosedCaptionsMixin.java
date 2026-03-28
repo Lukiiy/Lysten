@@ -2,12 +2,20 @@ package me.lukiiy.lysten.mixin;
 
 import me.lukiiy.lysten.client.LystenClient;
 import net.minecraft.client.gui.components.SubtitleOverlay;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.WeighedSoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Arrays;
 
 @Mixin(SubtitleOverlay.class)
 public class ClosedCaptionsMixin {
+    private static final String[] lysten$envIds = {"weather.rain", "ambient.cave", "ambient.sound"};
+
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"), index = 4)
     private int lysten$changeBgColor(int originalColor) {
         int bg = LystenClient.subtitlesBgColor.get();
@@ -20,5 +28,14 @@ public class ClosedCaptionsMixin {
         if (!LystenClient.subtitleArrows.get() && (text.equals(">") || text.equals("<"))) return "";
 
         return text;
+    }
+
+    @Inject(method = "onPlaySound", at = @At("HEAD"), cancellable = true)
+    private void lysten$play(SoundInstance soundInstance, WeighedSoundEvents weighedSoundEvents, float f, CallbackInfo ci) {
+        String key = soundInstance.getIdentifier().toLanguageKey().replace("minecraft.", "");
+
+        if (LystenClient.playerlessSubtitles.get() && key.startsWith("entity.player")) ci.cancel();
+
+        if (LystenClient.envlessSubtitles.get() && Arrays.stream(lysten$envIds).anyMatch(key::startsWith)) ci.cancel();
     }
 }

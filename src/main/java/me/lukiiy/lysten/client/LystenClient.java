@@ -35,6 +35,8 @@ public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Boolean> hideCloseBobbers = ConfigKey.bool("hideCloseBobbers", true);
     public static ConfigKey<Boolean> survivalTestHurt = ConfigKey.bool("survivalTestHurt", false);
     public static ConfigKey<Boolean> cleanerDebugMenu = ConfigKey.bool("cleanerDebugMenu", false);
+    public static ConfigKey<Boolean> playerlessSubtitles = ConfigKey.bool("playerlessSubtitles", false);
+    public static ConfigKey<Boolean> envlessSubtitles = ConfigKey.bool("envlessSubtitles", false);
 
     @Override
     public void onInitializeClient() {}
