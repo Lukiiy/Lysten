@@ -45,7 +45,7 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At("HEAD"))
     private void lysten$getHurtEntity(LivingEntity entity, LivingEntityRenderState state, float partialTicks, CallbackInfo ci) {
-        if (LystenClient.hitColor.get() != 0 && entity.hurtTime > 0) HurtContext.set(entity);
+        if (entity.hurtTime > 0) HurtContext.set(entity);
     }
 
     @Inject(method = "getShadowRadius(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;)F", at = @At("HEAD"), cancellable = true)

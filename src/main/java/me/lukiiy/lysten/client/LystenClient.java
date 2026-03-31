@@ -38,6 +38,8 @@ public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Boolean> playerlessSubtitles = ConfigKey.bool("playerlessSubtitles", false);
     public static ConfigKey<Boolean> envlessSubtitles = ConfigKey.bool("envlessSubtitles", false);
 
+    public static int vanillaHitColor = -1291911168;
+
     @Override
     public void onInitializeClient() {}
 
