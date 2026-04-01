@@ -8,6 +8,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.chat.Style;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,7 +23,7 @@ public class AbstractContainerMixin {
         if (LystenClient.invBlur.get()) ((ScreenAccessor) this).renderBgBlur(guiGraphics);
 
         Font font = ((Screen) (Object) this).getFont();
-        Component good = Component.literal(LystenClient.containerExtra.get());
+        Component good = LystenClient.parseText(LystenClient.containerExtra.get());
 
         guiGraphics.drawString(font, good, guiGraphics.guiWidth() - font.width(good) - 10, guiGraphics.guiHeight() - font.lineHeight - 10, 0xFFFFFFFF, true);
     }

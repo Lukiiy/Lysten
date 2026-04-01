@@ -39,7 +39,7 @@ public abstract class PauseMixin {
         if (!LystenClient.containerExtraPause.get()) return;
 
         Font font = ((Screen) (Object) this).getFont();
-        Component good = Component.literal(LystenClient.containerExtra.get());
+        Component good = LystenClient.parseText(LystenClient.containerExtra.get());
 
         guiGraphics.drawString(font, good, guiGraphics.guiWidth() - font.width(good) - 10, guiGraphics.guiHeight() - font.lineHeight - 10, 0xFFFFFFFF, true);
     }

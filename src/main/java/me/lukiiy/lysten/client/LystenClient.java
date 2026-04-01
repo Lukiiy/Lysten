@@ -1,7 +1,11 @@
 package me.lukiiy.lysten.client;
 
+import com.google.gson.JsonParser;
+import com.mojang.serialization.JsonOps;
 import me.lukiiy.lysten.ConfigKey;
 import net.fabricmc.api.ClientModInitializer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 
 public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Boolean> screenBobbing = ConfigKey.bool("screenBobbing", false);
@@ -43,6 +47,14 @@ public class LystenClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {}
+
+    public static Component parseText(String input) {
+        try {
+            return ComponentSerialization.CODEC.parse(JsonOps.INSTANCE, JsonParser.parseString(input)).getOrThrow();
+        } catch (Exception e) {
+            return Component.literal(input);
+        }
+    }
 
     public enum ItemRenderStyle {
         VANILLA,
