@@ -37,6 +37,7 @@ public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Boolean> cleanerDebugMenu = ConfigKey.bool("cleanerDebugMenu", false);
     public static ConfigKey<Boolean> playerlessSubtitles = ConfigKey.bool("playerlessSubtitles", false);
     public static ConfigKey<Boolean> envlessSubtitles = ConfigKey.bool("envlessSubtitles", false);
+    public static ConfigKey<Boolean> containerExtraPause = ConfigKey.bool("containerExtraPause", true);
 
     public static int vanillaHitColor = -1291911168;
 

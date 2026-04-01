@@ -117,6 +117,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new FloatEntry(LystenClient.subtitleScale, .1f, 4f));
             addEntry(new BooleanEntry(LystenClient.playerlessSubtitles));
             addEntry(new BooleanEntry(LystenClient.envlessSubtitles));
+            addEntry(new BooleanEntry(LystenClient.containerExtraPause));
         }
 
         @Override
