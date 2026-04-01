@@ -130,6 +130,7 @@ public class IngameConfScreen extends Screen {
             T value = key.get();
 
             box.setValue(value == null ? "" : value.toString());
+
             return box;
         }
 
