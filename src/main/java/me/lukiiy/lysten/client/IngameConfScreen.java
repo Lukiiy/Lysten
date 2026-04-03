@@ -129,6 +129,7 @@ public class IngameConfScreen extends Screen {
             EditBox box = new EditBox(font, 0, 0, width, 20, Component.literal(key.key));
             T value = key.get();
 
+            box.setMaxLength(512);
             box.setValue(value == null ? "" : value.toString());
 
             return box;
@@ -295,7 +296,6 @@ public class IngameConfScreen extends Screen {
 
                 EditBox box = (EditBox) widget;
 
-                box.setMaxLength(512);
                 box.setResponder(key::set);
             }
         }
