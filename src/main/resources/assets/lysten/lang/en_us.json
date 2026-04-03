@@ -38,6 +38,7 @@
   "lysten.setting.cleanerDebugMenu": "Cleaner Debug Menu",
   "lysten.setting.playerlessSubtitles": "Playerless Subtitles",
   "lysten.setting.envlessSubtitles": "Environment-less Subtitles",
+  "lysten.setting.containerExtraPause": "Show Cool String on Pause",
   "lysten.config.nonReloadable": "If you want to change this setting, you will need to restart your game.",
   "lysten.config.intbox": "Insert a number from %s to %s",
   "lysten.config.colorbox": "Please insert a valid ARGB color!\nExample: \"FF57C4FF\"\nLeave it blank for default!"
