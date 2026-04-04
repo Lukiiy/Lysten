@@ -22,6 +22,6 @@ public class EquipmentLayerMixin {
         if (tint == 0) return;
 
         args.set(5, OverlayTexture.NO_OVERLAY);
-        args.set(6, ARGB.srgbLerp(ARGB.alphaFloat(tint), args.get(6), ARGB.opaque(tint)));
+        args.set(6, ARGB.srgbLerp(ARGB.alphaFloat(tint) - .25f, args.get(6), ARGB.opaque(tint)));
     }
 }
