@@ -3,7 +3,7 @@ package me.lukiiy.lysten.mixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import me.lukiiy.lysten.client.HurtContext;
+import me.lukiiy.lysten.client.HurtTints;
 import me.lukiiy.lysten.client.LystenClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -30,22 +30,16 @@ import java.util.Map;
 
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderState> {
-    @Unique
-    private static final Map<LivingEntityRenderState, Float> lysten$HURT = new HashMap<>();
+    @Unique private static final Map<LivingEntityRenderState, Float> lysten$HURT = new HashMap<>();
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At("TAIL"))
     private void lysten$renderHurtOverlay(LivingEntity livingEntity, S livingEntityRenderState, float f, CallbackInfo ci) {
+        boolean isHurt = livingEntity.hurtTime > 0;
         int color = LystenClient.hitColor.get();
 
-        if (color != 0 && livingEntity.hurtTime > 0) livingEntityRenderState.hasRedOverlay = ARGB.alpha(color) != 0;
-
-        if (LystenClient.survivalTestHurt.get() && livingEntity.hurtTime > 0) lysten$HURT.put(livingEntityRenderState, livingEntity.hurtTime - f);
-        else lysten$HURT.remove(livingEntityRenderState);
-    }
-
-    @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At("HEAD"))
-    private void lysten$getHurtEntity(LivingEntity entity, LivingEntityRenderState state, float partialTicks, CallbackInfo ci) {
-        if (entity.hurtTime > 0) HurtContext.set(entity);
+        if (color != 0) livingEntityRenderState.hasRedOverlay = isHurt && ARGB.alpha(color) != 0;
+        if (isHurt) HurtTints.set(livingEntityRenderState, color != 0 ? color : LystenClient.vanillaHitColor); else HurtTints.remove(livingEntityRenderState);
+        if (LystenClient.survivalTestHurt.get() && isHurt) lysten$HURT.put(livingEntityRenderState, livingEntity.hurtTime - f); else lysten$HURT.remove(livingEntityRenderState);
     }
 
     @Inject(method = "getShadowRadius(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;)F", at = @At("HEAD"), cancellable = true)
@@ -60,7 +54,7 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
 
     @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At("TAIL"))
     private void lysten$clearHurtEntity(S livingEntityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, CallbackInfo ci) {
-        HurtContext.clear();
+        HurtTints.remove(livingEntityRenderState);
         lysten$HURT.remove(livingEntityRenderState);
     }
 
