@@ -2,7 +2,6 @@
   "lysten.config.title": "Lysten Config",
   "lysten.config.mini": "Lysten",
   "lysten.config.category.visuals": "Visual Effects",
-  "lysten.config.category.render": "Rendering",
   "lysten.config.category.uichanges": "UI Changes",
   "lysten.config.category.misc": "Misc",
   "lysten.setting.screenBobbing": "Screen Bobbing",

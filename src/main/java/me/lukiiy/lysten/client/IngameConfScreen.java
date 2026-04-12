@@ -73,6 +73,7 @@ public class IngameConfScreen extends Screen {
             super(IngameConfScreen.this.minecraft, IngameConfScreen.this.width, layout.getContentHeight(), layout.getHeaderHeight(), 24);
 
             font = IngameConfScreen.this.font;
+
             loadStuff();
         }
 
@@ -83,32 +84,31 @@ public class IngameConfScreen extends Screen {
             addEntry(new BooleanEntry(LystenClient.dropBobbing));
             addEntry(new BooleanEntry(LystenClient.itemDropShadow));
             addEntry(new BooleanEntry(LystenClient.blockOutlineFull));
+            addEntry(new ColorEntry(LystenClient.blockOutlineColor));
             addEntry(new EnumEntry<>(LystenClient.deathAnimStyle, LystenClient.DeathAnimationStyle.class));
             addEntry(new EnumEntry<>(LystenClient.particleRenderStyle, LystenClient.ParticleRenderStyle.class));
-            addEntry(new BooleanEntry(LystenClient.lighterBlockParticles));
             addEntry(new BooleanEntry(LystenClient.filteredFireLayer));
+            addEntry(new BooleanEntry(LystenClient.nametagShadow));
+            addEntry(new ColorEntry(LystenClient.nametagBg));
+            addEntry(new BooleanEntry(LystenClient.armorHitTint));
+            addEntry(new BooleanEntry(LystenClient.cleanerHitboxes));
+            addEntry(new BooleanEntry(LystenClient.hideCloseBobbers));
+            addEntry(new BooleanEntry(LystenClient.cleanerDebugMenu));
 
             addEntry(new CategoryEntry("misc"));
+            addEntry(new BooleanEntry(LystenClient.renderOwnNametag));
             addEntry(new ColorEntry(LystenClient.hitColor));
             addEntry(new StringEntry(LystenClient.containerExtra));
+            addEntry(new BooleanEntry(LystenClient.containerExtraPause));
             addEntry(new BooleanEntry(LystenClient.renderStuckArtifacts));
             addEntry(new BooleanEntry(LystenClient.tutorialToasts));
             addEntry(new BooleanEntry(LystenClient.arrowCount));
-
-            addEntry(new CategoryEntry("render"));
-            addEntry(new BooleanEntry(LystenClient.invBlur));
-            addEntry(new BooleanEntry(LystenClient.nametagShadow));
-            addEntry(new ColorEntry(LystenClient.nametagBg));
-            addEntry(new BooleanEntry(LystenClient.renderOwnNametag));
-            addEntry(new BooleanEntry(LystenClient.uiSeeThrough));
-            addEntry(new BooleanEntry(LystenClient.armorHitTint));
-            addEntry(new ColorEntry(LystenClient.blockOutlineColor));
-            addEntry(new BooleanEntry(LystenClient.cleanerHitboxes));
-            addEntry(new BooleanEntry(LystenClient.hideCloseBobbers));
+            addEntry(new BooleanEntry(LystenClient.lighterBlockParticles));
             addEntry(new BooleanEntry(LystenClient.survivalTestHurt));
-            addEntry(new BooleanEntry(LystenClient.cleanerDebugMenu));
 
             addEntry(new CategoryEntry("uichanges"));
+            addEntry(new BooleanEntry(LystenClient.invBlur));
+            addEntry(new BooleanEntry(LystenClient.uiSeeThrough));
             addEntry(new BooleanEntry(LystenClient.chatShadow));
             addEntry(new IntEntry(LystenClient.maxChatHistory, 1, 10000));
             addEntry(new ColorEntry(LystenClient.subtitlesBgColor));
@@ -117,7 +117,6 @@ public class IngameConfScreen extends Screen {
             addEntry(new FloatEntry(LystenClient.subtitleScale, .1f, 4f));
             addEntry(new BooleanEntry(LystenClient.playerlessSubtitles));
             addEntry(new BooleanEntry(LystenClient.envlessSubtitles));
-            addEntry(new BooleanEntry(LystenClient.containerExtraPause));
         }
 
         @Override
