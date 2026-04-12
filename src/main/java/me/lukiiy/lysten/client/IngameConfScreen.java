@@ -235,10 +235,14 @@ public class IngameConfScreen extends Screen {
                 super(key, createEditBox(key, 60));
 
                 EditBox box = (EditBox) widget;
+                String hex = Integer.toHexString(key.get()).toUpperCase();
 
                 box.setMaxLength(8);
                 box.setFilter(s -> s.matches("^[0-9A-Fa-f]{0,8}$"));
-                box.setValue(Integer.toHexString(key.get()));
+
+                if (hex.startsWith("FF")) hex = hex.substring(2);
+                box.setValue(hex);
+
                 box.setResponder(s -> key.set(hexToInt(s)));
                 box.setTooltip(Tooltip.create(Component.translatable("lysten.config.colorbox")));
             }
