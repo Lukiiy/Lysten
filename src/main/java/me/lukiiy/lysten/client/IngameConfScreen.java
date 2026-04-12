@@ -98,7 +98,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new CategoryEntry("misc"));
             addEntry(new BooleanEntry(LystenClient.renderOwnNametag));
             addEntry(new ColorEntry(LystenClient.hitColor));
-            addEntry(new StringEntry(LystenClient.containerExtra));
+            addEntry(new StringEntry(LystenClient.containerExtra, true));
             addEntry(new BooleanEntry(LystenClient.containerExtraPause));
             addEntry(new BooleanEntry(LystenClient.renderStuckArtifacts));
             addEntry(new BooleanEntry(LystenClient.tutorialToasts));
@@ -290,12 +290,16 @@ public class IngameConfScreen extends Screen {
         }
 
         class StringEntry extends Entry {
-            public StringEntry(ConfigKey<String> key) {
+            public StringEntry(ConfigKey<String> key, Boolean fancy) {
                 super(key, createEditBox(key, 120));
 
                 EditBox box = (EditBox) widget;
 
-                box.setResponder(key::set);
+                box.setResponder(it -> {
+                    key.set(it);
+
+                    if (fancy) box.setTooltip(Tooltip.create(LystenClient.parseText(it)));
+                });
             }
         }
 
