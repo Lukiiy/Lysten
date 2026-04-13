@@ -4,8 +4,13 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import me.lukiiy.lysten.ConfigKey;
 import net.fabricmc.api.ClientModInitializer;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Boolean> screenBobbing = ConfigKey.bool("screenBobbing", false);
@@ -54,6 +59,29 @@ public class LystenClient implements ClientModInitializer {
         } catch (Exception e) {
             return Component.literal(input);
         }
+    }
+
+    public static void filteredResponder(EditBox box, UnaryOperator<String> filtered, Consumer<String> responder) {
+        AtomicBoolean internal = new AtomicBoolean(false);
+
+        box.setResponder(text -> {
+            if (internal.get()) return;
+
+            String cleaned = filtered.apply(text);
+            if (!cleaned.equals(text)) {
+                internal.set(true);
+
+                int cursor = box.getCursorPosition();
+
+                box.setValue(cleaned);
+                box.setCursorPosition(Math.min(cursor, cleaned.length()));
+                internal.set(false);
+
+                text = cleaned;
+            }
+
+            responder.accept(text);
+        });
     }
 
     public enum ItemRenderStyle {

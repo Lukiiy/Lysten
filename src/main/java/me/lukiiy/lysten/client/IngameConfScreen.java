@@ -6,7 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
@@ -41,7 +41,7 @@ public class IngameConfScreen extends Screen {
         list = new ConfigList();
 
         layout.addToContents(list);
-        layout.addToFooter(LinearLayout.horizontal().spacing(8)).addChild(Button.builder(CommonComponents.GUI_DONE, b -> onClose()).width(100).build());
+        layout.addToFooter(LinearLayout.horizontal().spacing(8)).addChild(Button.builder(CommonComponents.GUI_DONE, _ -> onClose()).width(100).build());
         layout.visitWidgets(this::addRenderableWidget);
 
         repositionElements();
@@ -183,13 +183,13 @@ public class IngameConfScreen extends Screen {
             }
 
             @Override
-            public void renderContent(GuiGraphics gfx, int mouseX, int mouseY, boolean hovered, float delta) {
-                if (label != null) gfx.drawString(ConfigList.this.font, label, getContentX(), getContentY() + 6, -1);
+            public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float a) {
+                if (label != null) graphics.text(ConfigList.this.font, label, getContentX(), getContentY() + 6, -1);
 
                 if (widget != null) {
                     widget.setX(getContentRight() - widget.getWidth());
                     widget.setY(getContentY());
-                    widget.render(gfx, mouseX, mouseY, delta);
+                    widget.extractRenderState(graphics, mouseX, mouseY, a);
                 }
             }
         }
@@ -202,8 +202,8 @@ public class IngameConfScreen extends Screen {
             }
 
             @Override
-            public void renderContent(GuiGraphics instance, int mouseX, int mouseY, boolean hovered, float delta) {
-                instance.drawCenteredString(ConfigList.this.font, label, getContentXMiddle(), getContentY() + 6, -1);
+            public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float a) {
+                graphics.centeredText(ConfigList.this.font, label, getContentXMiddle(), getContentY() + 6, -1);
             }
         }
 
@@ -220,12 +220,7 @@ public class IngameConfScreen extends Screen {
 
                 EditBox box = (EditBox) widget;
 
-                box.setFilter(s -> s.isEmpty() || s.matches("\\d+"));
-                box.setResponder(s -> {
-                    int v = s.isEmpty() ? key.defaultValue : Integer.parseInt(s);
-
-                    key.set(Math.clamp(v, min, max));
-                });
+                LystenClient.filteredResponder(box, text -> text.replaceAll("\\d+", ""), s -> key.set(Math.clamp(s.isEmpty() ? 0 : Integer.parseInt(s), min, max)));
             }
 
         }
@@ -238,18 +233,22 @@ public class IngameConfScreen extends Screen {
                 String hex = Integer.toHexString(key.get()).toUpperCase();
 
                 box.setMaxLength(8);
-                box.setFilter(s -> s.matches("^[0-9A-Fa-f]{0,8}$"));
 
                 if (hex.startsWith("FF")) hex = hex.substring(2);
                 box.setValue(hex);
 
-                box.setResponder(s -> key.set(hexToInt(s)));
+                LystenClient.filteredResponder(box, it -> {
+                    it = it.replaceAll("[^0-9A-Fa-f]", "");
+
+                    return it.length() > 8 ? it.substring(0, 8) : it;
+                }, it -> key.set(hexToInt(it)));
+
                 box.setTooltip(Tooltip.create(Component.translatable("lysten.config.colorbox")));
             }
 
             @Override
-            public void renderContent(GuiGraphics instance, int mouseX, int mouseY, boolean hovered, float delta) {
-                super.renderContent(instance, mouseX, mouseY, hovered, delta);
+            public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float a) {
+                super.extractContent(graphics, mouseX, mouseY, hovered, a);
 
                 int color = hexToInt(((EditBox) widget).getValue());
                 if (color != 0) {
@@ -258,8 +257,8 @@ public class IngameConfScreen extends Screen {
                     int py = widget.getY() - size / 2;
                     int out = 0xFF000000;
 
-                    instance.fill(px, py, px + size, py + size, out | color);
-                    instance.renderOutline(px, py, size, size, out);
+                    graphics.fill(px, py, px + size, py + size, out | color);
+                    graphics.outline(px, py, size, size, out);
                 }
             }
 
@@ -283,11 +282,17 @@ public class IngameConfScreen extends Screen {
 
                 EditBox box = (EditBox) widget;
 
-                box.setFilter(s -> s.matches("\\d*\\.?\\d*"));
-                box.setResponder(s -> {
-                    if (s.isEmpty() || s.equals(".")) return;
+                LystenClient.filteredResponder(box, it -> {
+                    it = it.replaceAll("[^\\d.]", "");
 
-                    key.set(Math.clamp(Float.parseFloat(s), min, max));
+                    int dot = it.indexOf('.');
+                    if (dot != -1) it = it.substring(0, dot + 1) + it.substring(dot + 1).replace(".", "");
+
+                    return it;
+                }, it -> {
+                    if (it.isEmpty() || it.equals(".")) return;
+
+                    key.set(Math.clamp(Float.parseFloat(it), min, max));
                 });
             }
 
