@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "1.15-SNAPSHOT"
+    id("net.fabricmc.fabric-loom")
 }
 
 version = rootProject.property("version")!!
@@ -19,10 +19,16 @@ val modMenuVer = project.property("modmenu_version")!!
 
 dependencies {
     minecraft("com.mojang:minecraft:${minecraft}")
-    mappings(loom.officialMojangMappings())
+    implementation("net.fabricmc:fabric-loader:${loader}")
+    compileOnly("com.terraformersmc:modmenu:${modMenuVer}")
+}
 
-    modImplementation("net.fabricmc:fabric-loader:${loader}")
-    modCompileOnly("com.terraformersmc:modmenu:${modMenuVer}")
+loom {
+    mods {
+        register("lysten") {
+            sourceSet(sourceSets.main.get())
+        }
+    }
 }
 
 tasks {
@@ -49,6 +55,10 @@ tasks {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
+
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+
     withSourcesJar()
 }
