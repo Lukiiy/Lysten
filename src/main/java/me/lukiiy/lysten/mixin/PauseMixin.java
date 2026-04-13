@@ -3,7 +3,7 @@ package me.lukiiy.lysten.mixin;
 import me.lukiiy.lysten.client.IngameConfScreen;
 import me.lukiiy.lysten.client.LystenClient;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 @Mixin(PauseScreen.class)
 public abstract class PauseMixin {
     @Shadow
-    protected abstract Button openScreenButton(Component component, Supplier<Screen> supplier);
+    protected abstract Button openScreenButton(Component message, Supplier<Screen> newScreen);
 
     @Inject(method = "createPauseMenu", at = @At("TAIL"))
     private void lysten$configBtn(CallbackInfo ci) {
@@ -34,13 +34,13 @@ public abstract class PauseMixin {
         ((ScreenAccessor) screen).addWidgetToRender(button);
     }
 
-    @Inject(method = "renderBackground", at = @At("TAIL"))
-    private void lysten$bg(GuiGraphics guiGraphics, int i, int j, float f, CallbackInfo ci) {
+    @Inject(method = "extractBackground", at = @At("TAIL"))
+    private void lysten$bg(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
         if (!LystenClient.containerExtraPause.get()) return;
 
         Font font = ((Screen) (Object) this).getFont();
         Component good = LystenClient.parseText(LystenClient.containerExtra.get());
 
-        guiGraphics.drawString(font, good, guiGraphics.guiWidth() - font.width(good) - 10, guiGraphics.guiHeight() - font.lineHeight - 10, 0xFFFFFFFF, true);
+        graphics.text(font, good, graphics.guiWidth() - font.width(good) - 10, graphics.guiHeight() - font.lineHeight - 10, 0xFFFFFFFF, true);
     }
 }

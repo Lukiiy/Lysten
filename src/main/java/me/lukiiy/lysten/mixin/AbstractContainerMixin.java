@@ -4,12 +4,10 @@ import me.lukiiy.lysten.client.LystenClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentSerialization;
-import net.minecraft.network.chat.Style;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,13 +16,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 @Mixin(AbstractContainerScreen.class)
 public class AbstractContainerMixin {
-    @Inject(method = "renderBackground", at = @At("TAIL"))
-    private void lysten$bg(GuiGraphics guiGraphics, int i, int j, float f, CallbackInfo ci) {
-        if (LystenClient.invBlur.get()) ((ScreenAccessor) this).renderBgBlur(guiGraphics);
+    @Inject(method = "extractRenderState", at = @At("TAIL"))
+    private void lysten$bg(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
+        if (LystenClient.invBlur.get()) ((ScreenAccessor) this).renderBgBlur(graphics);
 
         Font font = ((Screen) (Object) this).getFont();
         Component good = LystenClient.parseText(LystenClient.containerExtra.get());
 
-        guiGraphics.drawString(font, good, guiGraphics.guiWidth() - font.width(good) - 10, guiGraphics.guiHeight() - font.lineHeight - 10, 0xFFFFFFFF, true);
+        graphics.text(font, good, graphics.guiWidth() - font.width(good) - 10, graphics.guiHeight() - font.lineHeight - 10, 0xFFFFFFFF, true);
     }
 }

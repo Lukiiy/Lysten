@@ -10,7 +10,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.Entity;
@@ -33,32 +33,32 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
     @Unique private static final Map<LivingEntityRenderState, Float> lysten$HURT = new HashMap<>();
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At("TAIL"))
-    private void lysten$renderHurtOverlay(LivingEntity livingEntity, S livingEntityRenderState, float f, CallbackInfo ci) {
-        boolean isHurt = livingEntity.hurtTime > 0;
+    private void lysten$renderHurtOverlay(LivingEntity entity, S state, float partialTicks, CallbackInfo ci) {
+        boolean isHurt = entity.hurtTime > 0;
         int color = LystenClient.hitColor.get();
 
-        if (color != 0) livingEntityRenderState.hasRedOverlay = isHurt && ARGB.alpha(color) != 0;
-        if (isHurt) HurtTints.set(livingEntityRenderState, color != 0 ? color : LystenClient.vanillaHitColor); else HurtTints.remove(livingEntityRenderState);
-        if (LystenClient.survivalTestHurt.get() && isHurt) lysten$HURT.put(livingEntityRenderState, livingEntity.hurtTime - f); else lysten$HURT.remove(livingEntityRenderState);
+        if (color != 0) state.hasRedOverlay = isHurt && ARGB.alpha(color) != 0;
+        if (isHurt) HurtTints.set(state, color != 0 ? color : LystenClient.vanillaHitColor); else HurtTints.remove(state);
+        if (LystenClient.survivalTestHurt.get() && isHurt) lysten$HURT.put(state, entity.hurtTime - partialTicks); else lysten$HURT.remove(state);
     }
 
     @Inject(method = "getShadowRadius(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;)F", at = @At("HEAD"), cancellable = true)
-    private void lysten$shadow(S livingEntityRenderState, CallbackInfoReturnable<Float> cir) {
-        if (livingEntityRenderState.deathTime > 0) cir.setReturnValue(0f);
+    private void lysten$shadow(S state, CallbackInfoReturnable<Float> cir) {
+        if (state.deathTime > 0) cir.setReturnValue(0f);
     }
 
-    @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At("HEAD"), cancellable = true)
-    private void lysten$cancelRender(S livingEntityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, CallbackInfo ci) {
-        if (LystenClient.deathAnimStyle.get() == LystenClient.DeathAnimationStyle.INVISIBLE && livingEntityRenderState.deathTime > 0) ci.cancel();
+    @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V", at = @At("HEAD"), cancellable = true)
+    private void lysten$cancelRender(S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera, CallbackInfo ci) {
+        if (LystenClient.deathAnimStyle.get() == LystenClient.DeathAnimationStyle.INVISIBLE && state.deathTime > 0) ci.cancel();
     }
 
-    @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At("TAIL"))
-    private void lysten$clearHurtEntity(S livingEntityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, CallbackInfo ci) {
-        HurtTints.remove(livingEntityRenderState);
-        lysten$HURT.remove(livingEntityRenderState);
+    @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V", at = @At("TAIL"))
+    private void lysten$clearHurtEntity(S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera, CallbackInfo ci) {
+        HurtTints.remove(state);
+        lysten$HURT.remove(state);
     }
 
-    @ModifyArgs(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/texture/TextureAtlasSprite;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"))
+    @ModifyArgs(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/texture/TextureAtlasSprite;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"))
     private void lysten$tintHurtOverlay(Args args) { // safe?
         if (!(args.get(1) instanceof LivingEntityRenderState state)) return;
 
@@ -77,7 +77,7 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
     }
 
     @Inject(method = "setupRotations", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V", ordinal = 1), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void lysten$deathRot(S livingEntityRenderState, PoseStack poseStack, float f, float g, CallbackInfo ci, float h) {
+    private void lysten$deathRot(S state, PoseStack poseStack, float bodyRot, float entityScale, CallbackInfo ci, float h) {
         switch (LystenClient.deathAnimStyle.get()) {
             case NONE -> {
                 poseStack.mulPose(Axis.YP.rotationDegrees(0));
@@ -94,7 +94,7 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
     }
 
     @Inject(method = "setupRotations", at = @At("TAIL"))
-    private void lysten$survivaltestHurtAnim(S state, PoseStack poseStack, float bodyRot, float scale, CallbackInfo ci) {
+    private void lysten$survivaltestHurtAnim(S state, PoseStack poseStack, float bodyRot, float entityScale, CallbackInfo ci) {
         Float hurt = lysten$HURT.get(state);
         if (hurt == null || hurt <= 0) return;
 

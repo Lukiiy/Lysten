@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BeeStingerLayer.class)
 public class StingLayerMixin {
     @Inject(method = "numStuck", at = @At("HEAD"), cancellable = true)
-    private void lysten$noStuckStings(AvatarRenderState avatarRenderState, CallbackInfoReturnable<Integer> cir) {
+    private void lysten$noStuckStings(AvatarRenderState state, CallbackInfoReturnable<Integer> cir) {
         if (!LystenClient.renderStuckArtifacts.get()) cir.setReturnValue(0);
     }
 }

@@ -1,6 +1,6 @@
 package me.lukiiy.lysten.mixin;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(Screen.class)
 public interface ScreenAccessor {
-    @Invoker("renderBlurredBackground")
-    void renderBgBlur(GuiGraphics gfx);
+    @Invoker("extractBlurredBackground")
+    void renderBgBlur(GuiGraphicsExtractor gfx);
 
     @Invoker("addRenderableWidget")
     <T extends GuiEventListener & Renderable & NarratableEntry> T addWidgetToRender(T widget);

@@ -18,8 +18,8 @@ public class ChatComponentMixin {
         return LystenClient.maxChatHistory.get();
     }
 
-    @ModifyVariable(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V", at = @At("HEAD"), argsOnly = true)
-    private Component lysten$shadows(Component component) {
-        return LystenClient.chatShadow.get() ? component : component.copy().withStyle(component.getStyle().withoutShadow());
+    @ModifyVariable(method = "addMessage", at = @At("HEAD"), argsOnly = true, name = "contents")
+    private Component lysten$shadows(Component contents) {
+        return LystenClient.chatShadow.get() ? contents : contents.copy().withStyle(contents.getStyle().withoutShadow());
     }
 }

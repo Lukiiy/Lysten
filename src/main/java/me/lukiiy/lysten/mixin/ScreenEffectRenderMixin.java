@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ScreenEffectRenderer.class)
 public class ScreenEffectRenderMixin {
     @Inject(method = "renderFire", at = @At("HEAD"), cancellable = true)
-    private static void lysten$cancelFireOverlay(PoseStack poseStack, MultiBufferSource multiBufferSource, TextureAtlasSprite textureAtlasSprite, CallbackInfo ci) {
+    private static void lysten$cancelFireOverlay(PoseStack poseStack, MultiBufferSource bufferSource, TextureAtlasSprite sprite, CallbackInfo ci) {
         if (!LystenClient.filteredFireLayer.get()) return;
 
         LocalPlayer player = Minecraft.getInstance().player;

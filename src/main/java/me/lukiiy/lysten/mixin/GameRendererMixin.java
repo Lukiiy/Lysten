@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.state.OptionsRenderState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,10 +18,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class GameRendererMixin {
     @Shadow @Final private Minecraft minecraft;
 
-    @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"))
-    private Object lysten$noScreenBob(OptionInstance<Boolean> instance) {
-        if (instance == minecraft.options.bobView()) return LystenClient.screenBobbing.get() && instance.get();
-
-        return instance.get();
+    @Redirect(method = "renderLevel", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/state/OptionsRenderState;bobView:Z"))
+    private boolean noScreenBob(OptionsRenderState state) {
+        return LystenClient.screenBobbing.get() && state.bobView;
     }
 }
