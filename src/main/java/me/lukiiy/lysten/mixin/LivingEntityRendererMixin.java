@@ -94,7 +94,7 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
     }
 
     @Inject(method = "setupRotations", at = @At("TAIL"))
-    private void lysten$survivaltestHurtAnim(S state, PoseStack poseStack, float bodyRot, float entityScale, CallbackInfo ci) {
+    private void lysten$survivaltestHurtAnim(S state, PoseStack poseStack, float bodyRot, float entityScale, CallbackInfo ci) { // TODO
         Float hurt = lysten$HURT.get(state);
         if (hurt == null || hurt <= 0) return;
 

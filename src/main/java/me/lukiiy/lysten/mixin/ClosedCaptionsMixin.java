@@ -37,7 +37,6 @@ public class ClosedCaptionsMixin {
         String key = sound.getIdentifier().toLanguageKey().replace("minecraft.", "");
 
         if (LystenClient.playerlessSubtitles.get() && key.startsWith("entity.player")) ci.cancel();
-
         if (LystenClient.envlessSubtitles.get() && Arrays.stream(lysten$envIds).anyMatch(key::startsWith)) ci.cancel();
     }
 }

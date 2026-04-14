@@ -25,7 +25,7 @@ public abstract class ScreenMixin {
 
     @Inject(method = "extractBackground", at = @At("HEAD"), cancellable = true)
     private void lysten$renderBg(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
-        if ((!LystenClient.uiSeeThrough.get() && !(minecraft.screen instanceof PauseScreen)) || minecraft.level == null) {
+        if (minecraft != null && ((!LystenClient.uiSeeThrough.get() && !(minecraft.screen instanceof PauseScreen)) || minecraft.level == null)) {
             extractPanorama(graphics, a);
             ci.cancel();
         }
@@ -33,6 +33,6 @@ public abstract class ScreenMixin {
 
     @Inject(method = "extractBackground", at = @At("TAIL"))
     private void lysten$blurBg(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
-        if (minecraft.screen instanceof AbstractContainerScreen<?> && LystenClient.invBlur.get()) extractBlurredBackground(graphics);
+        if (minecraft != null && minecraft.screen instanceof AbstractContainerScreen<?> && LystenClient.invBlur.get()) extractBlurredBackground(graphics);
     }
 }

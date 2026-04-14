@@ -16,11 +16,11 @@ public abstract class SingleQuadParticleMixin {
         if (LystenClient.particleRenderStyle.get() != LystenClient.ParticleRenderStyle.FACE_CAMERA) return;
 
         cir.setReturnValue((target, camera, partialTickTime) -> {
-            ParticleAccessor partic = (ParticleAccessor) this;
+            ParticleAccessor particle = (ParticleAccessor) this;
 
-            double px = Mth.lerp(partialTickTime, partic.xo(), partic.x());
-            double py = Mth.lerp(partialTickTime, partic.yo(), partic.y());
-            double pz = Mth.lerp(partialTickTime, partic.zo(), partic.z());
+            double px = Mth.lerp(partialTickTime, particle.xo(), particle.x());
+            double py = Mth.lerp(partialTickTime, particle.yo(), particle.y());
+            double pz = Mth.lerp(partialTickTime, particle.zo(), particle.z());
 
             Vec3 camPos = camera.position();
 
