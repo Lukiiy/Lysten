@@ -85,6 +85,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new BooleanEntry(LystenClient.itemDropShadow));
             addEntry(new BooleanEntry(LystenClient.blockOutlineFull));
             addEntry(new ColorEntry(LystenClient.blockOutlineColor));
+            addEntry(new ColorEntry(LystenClient.hitColor));
             addEntry(new EnumEntry<>(LystenClient.deathAnimStyle, LystenClient.DeathAnimationStyle.class));
             addEntry(new EnumEntry<>(LystenClient.particleRenderStyle, LystenClient.ParticleRenderStyle.class));
             addEntry(new BooleanEntry(LystenClient.filteredFireLayer));
@@ -97,7 +98,6 @@ public class IngameConfScreen extends Screen {
 
             addEntry(new CategoryEntry("misc"));
             addEntry(new BooleanEntry(LystenClient.renderOwnNametag));
-            addEntry(new ColorEntry(LystenClient.hitColor));
             addEntry(new StringEntry(LystenClient.containerExtra, true));
             addEntry(new BooleanEntry(LystenClient.containerExtraPause));
             addEntry(new BooleanEntry(LystenClient.renderStuckArtifacts));
