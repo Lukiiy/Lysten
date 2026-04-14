@@ -15,12 +15,12 @@ public abstract class SingleQuadParticleMixin {
     private void lysten$overrideFacingMode(CallbackInfoReturnable<SingleQuadParticle.FacingCameraMode> cir) {
         if (LystenClient.particleRenderStyle.get() != LystenClient.ParticleRenderStyle.FACE_CAMERA) return;
 
-        cir.setReturnValue((quaternionf, camera, tickDelta) -> {
+        cir.setReturnValue((target, camera, partialTickTime) -> {
             ParticleAccessor partic = (ParticleAccessor) this;
 
-            double px = Mth.lerp(tickDelta, partic.xo(), partic.x());
-            double py = Mth.lerp(tickDelta, partic.yo(), partic.y());
-            double pz = Mth.lerp(tickDelta, partic.zo(), partic.z());
+            double px = Mth.lerp(partialTickTime, partic.xo(), partic.x());
+            double py = Mth.lerp(partialTickTime, partic.yo(), partic.y());
+            double pz = Mth.lerp(partialTickTime, partic.zo(), partic.z());
 
             Vec3 camPos = camera.position();
 
@@ -30,7 +30,7 @@ public abstract class SingleQuadParticleMixin {
 
             double len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
             if (len < 1e-6) {
-                quaternionf.identity();
+                target.identity();
                 return;
             }
 
@@ -41,7 +41,7 @@ public abstract class SingleQuadParticleMixin {
             float yaw = (float) Math.atan2(dx, dz);
             float pitch = (float) -Math.asin(dy);
 
-            quaternionf.identity().rotateY(yaw).rotateX(pitch);
+            target.identity().rotateY(yaw).rotateX(pitch);
         });
     }
 }
