@@ -18,8 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class AbstractContainerMixin {
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void lysten$bg(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
-        if (LystenClient.invBlur.get()) ((ScreenAccessor) this).renderBgBlur(graphics);
-
         Font font = ((Screen) (Object) this).getFont();
         Component good = LystenClient.parseText(LystenClient.containerExtra.get());
 

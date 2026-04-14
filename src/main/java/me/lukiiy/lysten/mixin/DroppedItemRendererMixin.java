@@ -45,7 +45,7 @@ public class DroppedItemRendererMixin {
     }
 
     @WrapOperation(method = "submit(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V"))
-    private void lysten$flatten(PoseStack instance, Quaternionfc by, Operation<Void> original, @Local(argsOnly = true, name = "state") ItemEntityRenderState state) {
+    private void lysten$flatten(PoseStack instance, Quaternionfc by, Operation<Void> original, @Local(argsOnly = true) ItemEntityRenderState state) {
         if (LystenClient.itemStyle.get() == LystenClient.ItemRenderStyle.FLATTEN && (((ItemEntityRenderStateAccess)state).lysten$get2D())) {
             instance.mulPose(Axis.YP.rotationDegrees(-Minecraft.getInstance().gameRenderer.getMainCamera().yRot()));
             instance.scale(1, 1, .01f);

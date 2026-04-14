@@ -4,7 +4,6 @@ import me.lukiiy.lysten.client.LystenClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.OptionInstance;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.state.OptionsRenderState;
 import org.spongepowered.asm.mixin.Final;
