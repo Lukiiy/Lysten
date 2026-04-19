@@ -19,6 +19,7 @@
     "ItemEntityRenderStateMixin",
     "LevelRendererMixin",
     "LivingEntityRendererMixin",
+    "MinecraftMixin",
     "NametagRendererMixin",
     "ParticleAccessor",
     "PauseMixin",
