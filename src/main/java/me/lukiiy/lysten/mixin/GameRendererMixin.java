@@ -18,7 +18,7 @@ public abstract class GameRendererMixin {
     @Shadow @Final private Minecraft minecraft;
 
     @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"))
-    private Object lysten$noScreenBob(OptionInstance<Boolean> instance) {
+    private Object lysten$bob(OptionInstance<Boolean> instance) {
         if (instance == minecraft.options.bobView()) return LystenClient.screenBobbing.get() && instance.get();
 
         return instance.get();

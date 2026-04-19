@@ -11,22 +11,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SingleQuadParticle.class)
 public abstract class SingleQuadParticleMixin {
-    @Inject(
-            method = "getFacingCameraMode",
-            at = @At("HEAD"),
-            cancellable = true
-    )
+    @Inject(method = "getFacingCameraMode", at = @At("HEAD"), cancellable = true)
     private void lysten$overrideFacingMode(CallbackInfoReturnable<SingleQuadParticle.FacingCameraMode> cir) {
-
         if (LystenClient.particleRenderStyle.get() != LystenClient.ParticleRenderStyle.FACE_CAMERA) return;
 
         cir.setReturnValue((quaternionf, camera, tickDelta) -> {
-            SingleQuadParticle self = (SingleQuadParticle) (Object) this;
-            ParticleAccessor partic = (ParticleAccessor) this;
+            ParticleAccessor particle = (ParticleAccessor) this;
 
-            double px = Mth.lerp(tickDelta, partic.xo(), partic.x());
-            double py = Mth.lerp(tickDelta, partic.yo(), partic.y());
-            double pz = Mth.lerp(tickDelta, partic.zo(), partic.z());
+            double px = Mth.lerp(tickDelta, particle.xo(), particle.x());
+            double py = Mth.lerp(tickDelta, particle.yo(), particle.y());
+            double pz = Mth.lerp(tickDelta, particle.zo(), particle.z());
 
             Vec3 camPos = camera.position();
 

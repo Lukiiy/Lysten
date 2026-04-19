@@ -20,7 +20,7 @@ public abstract class ScreenMixin {
 
     @Inject(method = "renderBackground", at = @At("HEAD"), cancellable = true)
     private void lysten$renderBg(GuiGraphics guiGraphics, int i, int j, float f, CallbackInfo ci) {
-        if ((!LystenClient.uiSeeThrough.get() && !(minecraft.screen instanceof PauseScreen)) || minecraft.level == null) {
+        if (minecraft != null && ((!LystenClient.uiSeeThrough.get() && !(minecraft.screen instanceof PauseScreen)) || minecraft.level == null)) {
             renderPanorama(guiGraphics, f);
             ci.cancel();
         }
