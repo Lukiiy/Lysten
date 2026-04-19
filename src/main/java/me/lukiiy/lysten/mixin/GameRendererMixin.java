@@ -1,5 +1,6 @@
 package me.lukiiy.lysten.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import me.lukiiy.lysten.client.LystenClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -22,5 +23,12 @@ public abstract class GameRendererMixin {
         if (instance == minecraft.options.bobView()) return LystenClient.screenBobbing.get() && instance.get();
 
         return instance.get();
+    }
+
+    @ModifyExpressionValue(method = "renderItemInHand", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Options;hideGui:Z"))
+    private boolean lysten$handInF1(boolean original) {
+        if (LystenClient.renderHandInF1.get()) return false;
+
+        return original;
     }
 }

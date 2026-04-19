@@ -42,6 +42,8 @@ public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Boolean> playerlessSubtitles = ConfigKey.bool("playerlessSubtitles", false);
     public static ConfigKey<Boolean> envlessSubtitles = ConfigKey.bool("envlessSubtitles", false);
     public static ConfigKey<Boolean> containerExtraPause = ConfigKey.bool("containerExtraPause", true);
+    public static ConfigKey<Boolean> renderNamesInF1 = ConfigKey.bool("unhideGuiRenderNames", false);
+    public static ConfigKey<Boolean> renderHandInF1 = ConfigKey.bool("unhideGuiHands", false);
 
     public static int vanillaHitColor = -1291911168;
 
