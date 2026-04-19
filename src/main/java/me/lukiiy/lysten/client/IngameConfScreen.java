@@ -89,6 +89,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new EnumEntry<>(LystenClient.deathAnimStyle, LystenClient.DeathAnimationStyle.class));
             addEntry(new EnumEntry<>(LystenClient.particleRenderStyle, LystenClient.ParticleRenderStyle.class));
             addEntry(new BooleanEntry(LystenClient.armorHitTint));
+            addEntry(new BooleanEntry(LystenClient.capeHitTint));
             addEntry(new BooleanEntry(LystenClient.filteredFireLayer));
             addEntry(new BooleanEntry(LystenClient.nametagShadow));
             addEntry(new ColorEntry(LystenClient.nametagBg));
