@@ -40,6 +40,7 @@
   "lysten.setting.containerExtraPause": "Mostrar textinho no menu de Pausa",
   "lysten.setting.unhideGuiRenderNames": "Alternar Nametags no F1",
   "lysten.setting.unhideGuiHands": "Alternar as mãos no F1",
+  "lysten.setting.capeHitTint": "Tonalidade de Dano em Capas",
   "lysten.config.nonReloadable": "Se você quiser alterar essa configuração, será necessário reiniciar o jogo.",
   "lysten.config.intbox": "Insira um número entre %s e %s",
   "lysten.config.colorbox": "Insira uma cor ARGB válida!\nExemplo: \"FF57C4FF\"\nDeixe em branco para usar a cor padrão!"
