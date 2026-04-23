@@ -93,8 +93,6 @@ public class IngameConfScreen extends Screen {
             addEntry(new BooleanEntry(LystenClient.filteredFireLayer));
             addEntry(new BooleanEntry(LystenClient.nametagShadow));
             addEntry(new ColorEntry(LystenClient.nametagBg));
-            addEntry(new BooleanEntry(LystenClient.renderNamesInF1));
-            addEntry(new BooleanEntry(LystenClient.renderHandInF1));
             addEntry(new BooleanEntry(LystenClient.cleanerHitboxes));
             addEntry(new BooleanEntry(LystenClient.hideCloseBobbers));
             addEntry(new BooleanEntry(LystenClient.cleanerDebugMenu));
@@ -120,6 +118,8 @@ public class IngameConfScreen extends Screen {
             addEntry(new FloatEntry(LystenClient.subtitleScale, .1f, 4f));
             addEntry(new BooleanEntry(LystenClient.playerlessSubtitles));
             addEntry(new BooleanEntry(LystenClient.envlessSubtitles));
+            addEntry(new BooleanEntry(LystenClient.renderNamesInF1));
+            addEntry(new BooleanEntry(LystenClient.renderHandInF1));
         }
 
         @Override
