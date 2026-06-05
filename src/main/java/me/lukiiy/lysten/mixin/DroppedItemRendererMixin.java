@@ -37,7 +37,7 @@ public class DroppedItemRendererMixin {
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/item/ItemEntity;Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;F)V", at = @At("TAIL"))
     private void lysten$getStack(ItemEntity entity, ItemEntityRenderState state, float f, CallbackInfo ci) {
-        ((ItemEntityRenderStateAccess) state).lysten$process(entity.getItem());
+        ((ItemEntityRenderStateAccess) state).lysten$process(entity.getItem(), state.item);
     }
 
     @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At("HEAD"))
@@ -49,7 +49,7 @@ public class DroppedItemRendererMixin {
     private void lysten$flatten(PoseStack instance, Quaternionfc quaternionfc, Operation<Void> original, @Local(argsOnly = true) ItemEntityRenderState state) {
         if (LystenClient.itemStyle.get() == LystenClient.ItemRenderStyle.FLATTEN && (((ItemEntityRenderStateAccess)state).lysten$get2D())) {
             instance.mulPose(Axis.YP.rotationDegrees(-Minecraft.getInstance().gameRenderer.getMainCamera().yRot()));
-            instance.scale(1, 1, .01f);
+            instance.scale(1, 1, .0625f);
         } else original.call(instance, quaternionfc);
     }
 

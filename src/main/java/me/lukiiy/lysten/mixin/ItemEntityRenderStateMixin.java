@@ -2,6 +2,7 @@ package me.lukiiy.lysten.mixin;
 
 import me.lukiiy.lysten.client.ItemEntityRenderStateAccess;
 import net.minecraft.client.renderer.entity.state.ItemEntityRenderState;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,8 +14,8 @@ public class ItemEntityRenderStateMixin implements ItemEntityRenderStateAccess {
 
     @Unique
     @Override
-    public void lysten$process(ItemStack item) {
-        if (item.getItem() instanceof BlockItem) lysten$2d = false;
+    public void lysten$process(ItemStack item, ItemStackRenderState state) {
+        lysten$2d = !(item.getItem() instanceof BlockItem) || !state.usesBlockLight();
     }
 
     @Override
