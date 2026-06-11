@@ -34,12 +34,16 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At("TAIL"))
     private void lysten$renderHurtOverlay(LivingEntity entity, S state, float partialTicks, CallbackInfo ci) {
-        boolean isHurt = entity.hurtTime > 0;
+        boolean isHurt = entity.hurtTime > 0 || entity.deathTime > 0;
         int color = LystenClient.hitColor.get();
 
         if (color != 0) state.hasRedOverlay = isHurt && ARGB.alpha(color) != 0;
-        if (isHurt) HurtTints.set(state, color != 0 ? color : LystenClient.vanillaHitColor); else HurtTints.remove(state);
-        if (LystenClient.survivalTestHurt.get() && isHurt) lysten$HURT.put(state, entity.hurtTime - partialTicks); else lysten$HURT.remove(state);
+
+        if (isHurt) HurtTints.set(state, color != 0 ? color : LystenClient.vanillaHitColor);
+        else HurtTints.remove(state);
+
+        if (LystenClient.survivalTestHurt.get() && entity.hurtTime > 0) lysten$HURT.put(state, entity.hurtTime - partialTicks);
+        else lysten$HURT.remove(state);
     }
 
     @Inject(method = "getShadowRadius(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;)F", at = @At("HEAD"), cancellable = true)
