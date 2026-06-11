@@ -34,12 +34,16 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At("TAIL"))
     private void lysten$renderHurtOverlay(LivingEntity livingEntity, S livingEntityRenderState, float f, CallbackInfo ci) {
-        boolean isHurt = livingEntity.hurtTime > 0;
+        boolean isHurt = livingEntity.hurtTime > 0 || livingEntity.deathTime > 0;
         int color = LystenClient.hitColor.get();
 
         if (color != 0) livingEntityRenderState.hasRedOverlay = isHurt && ARGB.alpha(color) != 0;
-        if (isHurt) HurtTints.set(livingEntityRenderState, color != 0 ? color : LystenClient.vanillaHitColor); else HurtTints.remove(livingEntityRenderState);
-        if (LystenClient.survivalTestHurt.get() && isHurt) lysten$HURT.put(livingEntityRenderState, livingEntity.hurtTime - f); else lysten$HURT.remove(livingEntityRenderState);
+
+        if (isHurt) HurtTints.set(livingEntityRenderState, color != 0 ? color : LystenClient.vanillaHitColor);
+        else HurtTints.remove(livingEntityRenderState);
+
+        if (LystenClient.survivalTestHurt.get() && livingEntity.hurtTime > 0) lysten$HURT.put(livingEntityRenderState, livingEntity.hurtTime - f);
+        else lysten$HURT.remove(livingEntityRenderState);
     }
 
     @Inject(method = "getShadowRadius(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;)F", at = @At("HEAD"), cancellable = true)
