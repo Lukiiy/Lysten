@@ -53,7 +53,12 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
 
     @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At("HEAD"), cancellable = true)
     private void lysten$cancelRender(S livingEntityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, CallbackInfo ci) {
-        if (LystenClient.deathAnimStyle.get() == LystenClient.DeathAnimationStyle.INVISIBLE && livingEntityRenderState.deathTime > 0) ci.cancel();
+        if (LystenClient.deathAnimStyle.get() == LystenClient.DeathAnimationStyle.INVISIBLE && livingEntityRenderState.deathTime > 0) {
+            HurtTints.remove(livingEntityRenderState);
+            lysten$HURT.remove(livingEntityRenderState);
+
+            ci.cancel();
+        }
     }
 
     @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At("TAIL"))
