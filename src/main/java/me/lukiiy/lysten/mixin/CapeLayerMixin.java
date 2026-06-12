@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.util.ARGB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -25,6 +26,8 @@ public class CapeLayerMixin {
             original.call(instance, model, o, poseStack, renderType, i, j, k, crumblingOverlay);
             return;
         }
+
+        tint = ARGB.linearLerp(.6f, tint, ARGB.greyscale(tint));
 
         instance.submitModel(model, o, poseStack, renderType, i, j, tint, null, k, crumblingOverlay);
     }
