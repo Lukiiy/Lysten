@@ -1,54 +1,87 @@
+import org.slf4j.event.Level
+
 plugins {
-    id("fabric-loom") version "1.15-SNAPSHOT"
+    id("net.neoforged.moddev") version "2.0.141"
 }
 
 version = rootProject.property("version")!!
 group = rootProject.property("group")!!
 
-base {
-    archivesName.set(rootProject.property("name")!!.toString())
-}
+val neoVersion = rootProject.property("neo_version")!!
+val id = rootProject.property("id")!!.toString()
 
-repositories {
-    maven("https://maven.terraformersmc.com/")
-}
+base.archivesName.set(id)
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 
-val minecraft = project.property("minecraft_version")!!
-val loader = project.property("loader_version")!!
-val modMenuVer = project.property("modmenu_version")!!
+neoForge {
+    version = neoVersion.toString()
 
-dependencies {
-    minecraft("com.mojang:minecraft:${minecraft}")
-    mappings(loom.officialMojangMappings())
+    runs {
+        create("client") {
+            client()
 
-    modImplementation("net.fabricmc:fabric-loader:${loader}")
-    modCompileOnly("com.terraformersmc:modmenu:${modMenuVer}")
-}
+            systemProperty("neoforge.enabledGameTestNamespaces", id)
+        }
 
-tasks {
-    processResources {
-        inputs.property("version", version)
-        inputs.property("minecraft_version", minecraft)
-        inputs.property("loader_version", loader)
+        create("data") {
+            clientData()
 
-        filesMatching("fabric.mod.json") {
-            expand(
-                "version" to version,
-                "minecraft_version" to minecraft,
-                "loader_version" to loader,
-                "modmenu_version" to modMenuVer
-            )
+            programArguments.addAll(listOf("--mod", id, "--all", "--output", file("src/generated/resources").absolutePath, "--existing", file("src/main/resources").absolutePath))
+        }
+
+        configureEach {
+            systemProperty("forge.logging.markers", "REGISTRIES")
+
+            logLevel = Level.DEBUG
         }
     }
 
-    jar {
-        from("LICENSE") {
-            rename { "${it}_${base.archivesName.get()}" }
+    mods {
+        create(id) {
+            sourceSet(sourceSets.main.get())
         }
     }
 }
 
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
-    withSourcesJar()
+sourceSets {
+    named("main") {
+        resources.srcDir("src/generated/resources")
+    }
+}
+
+val generateModMetadata by tasks.registering(ProcessResources::class) {
+    val replace = mapOf(
+        "minecraft_version" to rootProject.property("minecraft_version")!!,
+        "minecraft_version_range" to rootProject.property("minecraft_version_range")!!,
+        "neo_version" to neoVersion,
+        "neo_version_range" to rootProject.property("neo_version_range")!!,
+        "loader_version_range" to rootProject.property("loader_version_range")!!,
+        "mod_id" to id,
+        "mod_name" to rootProject.property("name")!!.toString(),
+        "mod_license" to rootProject.property("license")!!.toString(),
+        "mod_version" to version,
+        "mod_authors" to rootProject.property("authors")!!,
+        "mod_description" to rootProject.property("description")!!.toString()
+    )
+
+    inputs.properties(replace)
+
+    from("src/main/templates")
+    into("build/generated/sources/modMetadata")
+    expand(replace)
+}
+
+sourceSets {
+    named("main") {
+        resources.srcDir(generateModMetadata)
+    }
+}
+
+neoForge.ideSyncTask(generateModMetadata)
+
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+    }
 }
