@@ -82,7 +82,7 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
 
     @ModifyExpressionValue(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;D)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getCameraEntity()Lnet/minecraft/world/entity/Entity;"))
     private Entity lysten$renderOwnNametag(Entity original) {
-        return LystenClient.renderOwnNametag.get() && !(Minecraft.getInstance().screen instanceof AbstractContainerScreen<?>) ? null : original;
+        return LystenClient.renderOwnNametag.get() && !(Minecraft.getInstance().gui.screen() instanceof AbstractContainerScreen<?>) ? null : original;
     }
 
     @Inject(method = "setupRotations", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V", ordinal = 1), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
@@ -129,5 +129,12 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
         poseStack.translate(0, pivotY, 0);
         poseStack.mulPose(Axis.XP.rotationDegrees(angle));
         poseStack.translate(0, -pivotY, 0);
+    }
+
+    @ModifyExpressionValue(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;D)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Hud;isHidden()Z"))
+    private boolean lysten$namesInF1(boolean hidden) {
+        if (LystenClient.renderNamesInF1.get()) return false;
+
+        return hidden;
     }
 }
