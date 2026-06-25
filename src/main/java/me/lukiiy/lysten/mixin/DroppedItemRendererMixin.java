@@ -47,7 +47,7 @@ public class DroppedItemRendererMixin {
     @WrapOperation(method = "submit(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V"))
     private void lysten$flatten(PoseStack instance, Quaternionfc by, Operation<Void> original, @Local(argsOnly = true) ItemEntityRenderState state) {
         if (LystenClient.itemStyle.get() == LystenClient.ItemRenderStyle.FLATTEN && (((ItemEntityRenderStateAccess)state).lysten$get2D())) {
-            instance.mulPose(Axis.YP.rotationDegrees(-Minecraft.getInstance().gameRenderer.getMainCamera().yRot()));
+            instance.mulPose(Axis.YP.rotationDegrees(-Minecraft.getInstance().gameRenderer.mainCamera().yRot()));
             instance.scale(1, 1, .0625f);
         } else original.call(instance, by);
     }
@@ -70,7 +70,7 @@ public class DroppedItemRendererMixin {
             case BILLBOARD -> instance.mulPose(dispatcher.camera.rotation());
             case FACE_CAMERA -> {
                 Vec3 itemPos = new Vec3(lysten$state.x, lysten$state.y, lysten$state.z);
-                Vec3 sub = Minecraft.getInstance().gameRenderer.getMainCamera().position().subtract(itemPos).normalize();
+                Vec3 sub = Minecraft.getInstance().gameRenderer.mainCamera().position().subtract(itemPos).normalize();
 
                 float yaw = (float) Math.atan2(sub.x, sub.z);
                 float pitch = (float) Math.asin(-sub.y);

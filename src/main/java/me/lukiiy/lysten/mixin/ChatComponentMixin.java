@@ -18,7 +18,7 @@ public class ChatComponentMixin {
         return LystenClient.maxChatHistory.get();
     }
 
-    @ModifyVariable(method = "addMessage", at = @At("HEAD"), argsOnly = true)
+    @ModifyVariable(method = "addMessage", at = @At("HEAD"), argsOnly = true, name = "contents")
     private Component lysten$shadows(Component contents) {
         return LystenClient.chatShadow.get() ? contents : contents.copy().withStyle(contents.getStyle().withoutShadow());
     }

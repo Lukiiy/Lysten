@@ -22,7 +22,7 @@ public abstract class GameRendererMixin {
         return LystenClient.screenBobbing.get() && state.bobView;
     }
 
-    @ModifyExpressionValue(method = "renderItemInHand", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/state/OptionsRenderState;hideGui:Z", opcode = Opcodes.GETFIELD))
+    @ModifyExpressionValue(method = "renderItemInHand", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/state/gui/GuiRenderState;isHudHidden:Z", opcode = Opcodes.GETFIELD))
     private boolean lysten$handInF1(boolean original) {
         if (LystenClient.renderHandInF1.get()) return false;
 
