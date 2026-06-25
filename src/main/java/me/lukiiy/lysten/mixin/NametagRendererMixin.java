@@ -8,15 +8,15 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(NameTagFeatureRenderer.class)
 public class NametagRendererMixin {
-    @ModifyArg(method = "renderTranslucent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font;drawInBatch(Lnet/minecraft/network/chat/Component;FFIZLorg/joml/Matrix4fc;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/gui/Font$DisplayMode;II)V"), index = 8)
-    private int lysten$nametagBg(int originalBg) {
+    @ModifyArg(method = "prepareText", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font;prepareText(Lnet/minecraft/util/FormattedCharSequence;FFIZZI)Lnet/minecraft/client/gui/Font$PreparedText;"), index = 6)
+    private static int lysten$nametagBg(int originalBg) {
         int bg = LystenClient.nametagBg.get();
 
         return bg == 0 ? originalBg : bg;
     }
 
-    @ModifyArg(method = "renderTranslucent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font;drawInBatch(Lnet/minecraft/network/chat/Component;FFIZLorg/joml/Matrix4fc;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/gui/Font$DisplayMode;II)V"), index = 4)
-    private boolean lysten$toggleShadow(boolean original) {
+    @ModifyArg(method = "prepareText", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font;prepareText(Lnet/minecraft/util/FormattedCharSequence;FFIZZI)Lnet/minecraft/client/gui/Font$PreparedText;"), index = 4)
+    private static boolean lysten$toggleShadow(boolean original) {
         return LystenClient.nametagShadow.get();
     }
 }
