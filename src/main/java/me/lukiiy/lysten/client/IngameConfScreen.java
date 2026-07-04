@@ -99,6 +99,7 @@ public class IngameConfScreen extends Screen {
 
             addEntry(new CategoryEntry("misc"));
             addEntry(new BooleanEntry(LystenClient.renderOwnNametag));
+            addEntry(new BooleanEntry(LystenClient.billboardedNametags));
             addEntry(new StringEntry(LystenClient.containerExtra, true));
             addEntry(new BooleanEntry(LystenClient.containerExtraPause));
             addEntry(new BooleanEntry(LystenClient.renderStuckArtifacts));
