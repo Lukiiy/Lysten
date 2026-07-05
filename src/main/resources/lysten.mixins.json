@@ -13,6 +13,7 @@
     "DebugScreenOverlayMixin",
     "DroppedItemRendererMixin",
     "EntityRenderAccessor",
+    "EntityRendererMixin",
     "EquipmentLayerMixin",
     "FishingHookRenderMixin",
     "GameRendererMixin",
