@@ -4,6 +4,7 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import me.lukiiy.lysten.ConfigKey;
 import net.fabricmc.api.ClientModInitializer;
+import net.minecraft.client.renderer.PostChain;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 
@@ -48,6 +49,7 @@ public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Boolean> billboardedNametags = ConfigKey.bool("billboardedNametags", false);
 
     public static int vanillaHitColor = -1291911168;
+    public static PostChain postChain = null;
 
     @Override
     public void onInitializeClient() {}

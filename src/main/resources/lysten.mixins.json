@@ -29,6 +29,7 @@
     "ScreenAccessor",
     "ScreenEffectRenderMixin",
     "ScreenMixin",
+    "SharewareMixin",
     "SingleQuadParticleMixin",
     "StingLayerMixin",
     "TerrainParticleMixin",
