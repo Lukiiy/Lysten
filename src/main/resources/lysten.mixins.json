@@ -21,6 +21,7 @@
     "GuiMixin",
     "HitboxRendererMixin",
     "ItemEntityRenderStateMixin",
+    "ItemInHandMixin",
     "LevelRendererMixin",
     "LivingEntityRendererMixin",
     "MinecraftMixin",
