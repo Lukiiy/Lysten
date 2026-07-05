@@ -6,6 +6,7 @@
   "client": [
     "AbstractContainerMixin",
     "ArrowLayerMixin",
+    "CameraMixin",
     "CapeLayerMixin",
     "ChatComponentMixin",
     "ChunkedSharewareSampleMixin",
