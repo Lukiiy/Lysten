@@ -30,6 +30,10 @@ void main(){
     float blue = dot(base.rgb, BlueMatrix);
     vec3 col = vec3(red, green, blue);
 
+    // contrast
+    float contrast = 1.2;
+    col = (col - 0.5) * contrast + 0.5;
+
     // saturation
     float luma = dot(col, vec3(0.299, 0.587, 0.114)); // perceptual grayscale
     col = mix(vec3(luma), col, 2.0);
