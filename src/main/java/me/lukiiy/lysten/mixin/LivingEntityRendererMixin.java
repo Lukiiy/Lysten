@@ -1,6 +1,9 @@
 package me.lukiiy.lysten.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import me.lukiiy.lysten.client.HurtTints;
@@ -13,13 +16,18 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ARGB;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionfc;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
@@ -129,5 +137,18 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
         poseStack.translate(0, pivotY, 0);
         poseStack.mulPose(Axis.XP.rotationDegrees(angle));
         poseStack.translate(0, -pivotY, 0);
+    }
+
+    @WrapOperation(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;setupRotations(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;FF)V"))
+    private void lysten$nicegraphics(LivingEntityRenderer instance, S livingEntityRenderState, PoseStack poseStack, float f, float g, Operation<Void> original, @Local(argsOnly = true) S state) {
+        Vec3 cam = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+        float camYaw = (float) Math.toDegrees(Math.atan2(cam.x - state.x, cam.z - state.z)) + 180f;
+
+        float relative = Mth.wrapDegrees(f - camYaw);
+        float snapped = Math.round(relative / 45) * 45 + 180;
+
+        poseStack.mulPose(Axis.YP.rotationDegrees(camYaw));
+        poseStack.scale(1, 1, .02f);
+        poseStack.mulPose(Axis.YP.rotationDegrees(snapped));
     }
 }
