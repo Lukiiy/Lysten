@@ -18,7 +18,7 @@
     "GuiMixin",
     "HitboxRendererMixin",
     "ItemEntityRenderStateMixin",
-    "ItemHandRenderer",
+    "ItemHandRendererMixin",
     "LevelRendererMixin",
     "LivingEntityRendererMixin",
     "NametagRendererMixin",
