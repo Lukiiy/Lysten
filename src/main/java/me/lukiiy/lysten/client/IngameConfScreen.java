@@ -106,6 +106,7 @@ public class IngameConfScreen extends Screen {
             addEntry(new BooleanEntry(LystenClient.arrowCount));
             addEntry(new BooleanEntry(LystenClient.lighterBlockParticles));
             addEntry(new BooleanEntry(LystenClient.survivalTestHurt));
+            addEntry(new BooleanEntry(LystenClient.forceOffhand));
 
             addEntry(new CategoryEntry("uichanges"));
             addEntry(new BooleanEntry(LystenClient.invBlur));

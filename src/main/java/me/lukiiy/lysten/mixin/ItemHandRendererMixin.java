@@ -1,6 +1,7 @@
 package me.lukiiy.lysten.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import me.lukiiy.lysten.client.LystenClient;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -18,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ItemHandRendererMixin {
     @Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", shift = At.Shift.AFTER), cancellable = true)
     private void lysten$forceOffhand(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack, ItemStack itemStack, float inverseArmHeight, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, CallbackInfo ci) {
-        if (!itemStack.isEmpty() || hand != InteractionHand.OFF_HAND || player.isInvisible() || itemStack.has(DataComponents.MAP_ID)) return;
+        if (!LystenClient.forceOffhand.get() || !itemStack.isEmpty() || hand != InteractionHand.OFF_HAND || player.isInvisible() || itemStack.has(DataComponents.MAP_ID)) return;
 
         renderArm(poseStack, submitNodeCollector, lightCoords, inverseArmHeight, attack, player.getMainArm().getOpposite());
         poseStack.popPose();

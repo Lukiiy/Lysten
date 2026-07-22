@@ -50,6 +50,7 @@ public class LystenClient implements ClientModInitializer {
     public static ConfigKey<Boolean> renderNamesInF1 = ConfigKey.bool("unhideGuiRenderNames", false);
     public static ConfigKey<Boolean> renderHandInF1 = ConfigKey.bool("unhideGuiHands", false);
     public static ConfigKey<Boolean> capeHitTint = ConfigKey.bool("capeHitTint", false);
+    public static ConfigKey<Boolean> forceOffhand = ConfigKey.bool("forceOffhand", false);
 
     public static int vanillaHitColor = -1291911168;
 
