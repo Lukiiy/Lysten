@@ -10,6 +10,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,9 +18,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemInHandRenderer.class)
 public abstract class ItemHandRendererMixin {
+    @Shadow
+    private ItemStack mainHandItem;
+
     @Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", shift = At.Shift.AFTER), cancellable = true)
     private void lysten$forceOffhand(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack, ItemStack itemStack, float inverseArmHeight, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, CallbackInfo ci) {
-        if (!LystenClient.forceOffhand.get() || !itemStack.isEmpty() || hand != InteractionHand.OFF_HAND || player.isInvisible() || itemStack.has(DataComponents.MAP_ID)) return;
+        if (!LystenClient.forceOffhand.get() || hand != InteractionHand.OFF_HAND || player.isInvisible() || mainHandItem.has(DataComponents.MAP_ID) || !itemStack.isEmpty()) return;
 
         renderArm(poseStack, submitNodeCollector, lightCoords, inverseArmHeight, attack, player.getMainArm().getOpposite());
         poseStack.popPose();
